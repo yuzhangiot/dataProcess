@@ -15,7 +15,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x8a82740b5b528475e34c5b2bf342554c06c10e56'
+contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 # identiy the file type
 
 typeList = {

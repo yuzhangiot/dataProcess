@@ -15,7 +15,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x8a82740b5b528475e34c5b2bf342554c06c10e56'
+contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -220,7 +220,8 @@ def callforProcess(id):
 	#get all params needed in this transaction
 	#first, get coinbase address
 
-	params = [{"from": my_addr, "to": contract_addr,"value":hex(30000),"data": code_getpath_full}]
+	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
+	params = [{"from": my_addr, "to": contract_addr,"value":3000000,"data": code_getpath_full}]
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
@@ -359,13 +360,13 @@ def getFilterChanges(fid):
 sid=0
 datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
 getdatapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
-sentDataurl = "joseph@192.168.10.154:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.154:/home/joseph/ether/test/test.jpg"
+sentDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/test.jpg"
 
 while True:
 	seller_num = getSeller()
 	sid = randint(0,seller_num-1)
-	sid = 12
+	sid = 6
 	print "No. " + str(sid) + " has been choosen"
 	registUser(sid,"eth_sendTransaction")
 	time.sleep(10)
