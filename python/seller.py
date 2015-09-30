@@ -238,7 +238,7 @@ def checkData(datapath):
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = "test.jpg")
+	img.save(filename = "/home/joseph/ether/test/test.jpg")
 
 #Create a filter
 def createNewBlockFilter():
@@ -299,8 +299,7 @@ registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
 sid = 0
 idle_flag = True
-# datapath = "/home/joseph/ether/test/test.bmp"
-datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
+datapath = "/home/joseph/ether/test/test.bmp"
 m_status = "idle"
 print "registing...Please wait..."
 time.sleep(10)
