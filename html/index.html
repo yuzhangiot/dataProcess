@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>dataProcess</title>
+    <link rel="stylesheet" href="css/app.min.css">
+    <script src="js/app.min.js"></script>
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js">
+  <script type="text/javascript" src="../../bower/web3/dist/web3.js"></script>
+  
+<script type="text/javascript">
+
+var web3 = require('web3');
+web3.setProvider(new web3.providers.HttpProvider('http://localhost:8101'));
+// web3.setProvider(new web3.providers.QtSyncProvider('http://localhost:8545'));
+var coinbase = web3.eth.coinbase;
+var init_balance = web3.eth.getBalance(coinbase);
+var contractAddress = "0xceb7c90e5bb894bb28d249a56048150a3d6a3a4f";
+var filterL = web3.eth.filter('latest');
+console.log("no error");
+///First web3.eth.watch code to monitor coinbase
+filterL.watch(function(error,log){
+  console.log(error);
+  console.log(log);
+  
+  // document.getElementById('coinbase').innerText = coinbase;
+  var balance = web3.eth.getBalance(coinbase);
+  var earn_balance = balance -init_balance;
+  //document.getElementById('new_balance').innerText = earn_balance;
+  // var contractObj = JSON.stringify(web3.eth.getStorageAt(contractAddress));
+  var contractObj01 = web3.eth.getStorageAt(contractAddress,0);
+  var contractObj02 = web3.eth.getStorageAt(contractAddress,1);
+  var contractObj03 = web3.eth.getStorageAt(contractAddress,2);
+  var contractObj04 = web3.eth.getStorageAt(contractAddress,3);
+  var contractObj05 = web3.eth.getStorageAt(contractAddress,4);
+  console.log(contractObj01);
+  console.log(contractObj02);
+  console.log(contractObj03);
+  var contractStr01 = web3.toDecimal(contractObj01);
+  var contractStr02 = web3.toDecimal(contractObj02);
+  var contractStr03 = web3.toAscii(contractObj03);
+  var contractStr04 = web3.toDecimal(contractObj04);
+  // var contractStr05 = web3.toAscii(contractObj05);
+
+  document.getElementById('raw_path').innerText = contractStr01;
+  document.getElementById('after_path').innerText = contractStr02;
+  document.getElementById('status').innerText = contractStr03;
+  document.getElementById('new_balance').innerText = contractStr04;
+  document.getElementById('sender_addr').innerText = contractObj05;
+});
+
+
+
+///Insert your contract address var here:
+ 
+
+///Second web3.eth.watch code to monitor block number
+  
+
+</script>
+  </head>
+  <body>
+    <h1>Data process service provider</h1>
+
+    <hr>
+
+    <div>
+      <h3>The file path for the raw data</h3>
+      <br><i>Raw data path is :  </i> <strong id="raw_path"></strong>
+    </div>
+
+    <hr>
+
+    <div>
+      <h3>The file path for the processed data</h3>
+      <br><i>Processed data path is :  </i> <strong id="after_path"></strong>
+    </div>
+
+    <hr>
+
+    <div>
+      <h3>Process status</h3>
+      <br><i>The status is :  </i> <strong id="status"></strong>
+    </div>
+    
+    <hr>
+
+    <div>
+      <h3>Earned money</h3>
+      <br><i>The earned money is :  </i> <strong id="new_balance"></strong>
+    </div>
+
+    <hr>
+
+
+    <div>
+      <h3>Sender address</h3>
+      <br><i>The sender address is :  </i> <strong id="sender_addr"></strong>
+    </div>
+
+    <hr>
+
+  </body>
+</html>

@@ -1,0 +1,297 @@
+contract DataProcess {
+  bytes32 input_path;
+  bytes32 output_path;
+  bytes32 status;
+  address seller_addr;
+  uint32 status_num;
+  uint256 user_id;
+  uint256 data_id;
+  uint256 seller_id;
+
+  struct user{
+    address addr;
+    mapping (uint => dataDetail) dataDetails;
+  }
+
+  struct dataDetail{
+  	uint256 size;
+  	bytes32 datatype;
+    uint256 payment;
+    uint256 retryTime;
+  }
+
+  struct seller{
+    address addr;
+  }
+
+
+
+
+  mapping (uint256 => user) users;
+
+  function DataProcess(){
+    input_path = "~/input/003";
+    output_path = "~/output";
+    status = "idle";
+    status_num = 0;
+    seller_id = 0;
+    user_id = 0;
+    data_id = 0;
+    seller_addr = 0x0ccc12f6f8645576133faf7b37ee2786aaf8188d;
+  }
+
+  //useless for test only
+  function test(bool flag) returns(bytes32 str){
+    return "sb";
+  }
+
+  //卖家行为，设置原始文件路径，之后的卖家注册也在这个函数中完成
+
+  function setPath(bytes32 path,bool flag){
+    if(flag)
+  	 input_path = path;
+    else
+      output_path = path;
+  }
+
+  //买家行为，获取原始文件的路径，以便放数据
+
+  function getPath(bool flag) returns (bytes32 p){
+  	bytes32 path;
+    if(flag)
+      {path = input_path;}
+    else
+      {path = output_path;}
+  	return path;
+  }
+
+  //买家行为，通知卖家检查数据
+
+  function startCheck(){
+    if(status_num == 0)
+    {
+      status = "checking data...";
+      status_num = 1;
+    }
+  }
+
+  //卖家行为，检查数据是否有效
+
+  function checkedResult(bool flag){
+    if(flag){
+      status = "ready for process";
+      status_num = 2;
+    }
+    else{
+      status = "idle";
+      status_num = 0;
+    }
+  }
+
+  //买家行为，通知卖家可以开始处理数据了
+  function startProcess() returns (uint256 cid){
+  	if(msg.value >= 20000 && status_num == 2){
+  		status = "processing...";
+      status_num = 3;
+      uint256 did = data_id++;
+      user m_user = users[user_id];
+      dataDetail ddl = m_user.dataDetails[did];
+      m_user.addr = msg.sender;
+      ddl.payment = msg.value;
+      ddl.retryTime = 0;
+      return did;
+  	}
+    else{
+      return 0;
+    }
+  }
+
+  //卖家行为，标记处理完毕
+
+  function finishProcess(){
+  		status = "finished";
+      status_num = 4;  
+  }
+
+  //买家行为，确认数据确实处理完毕且正确
+
+  function confirm(uint256 cid, bool flag){
+    user m_user = users[user_id];
+    dataDetail ddl = m_user.dataDetails[cid];
+    if(msg.sender == m_user.addr){
+      if(flag){
+        status = "confirmed";
+        status_num = 5;
+      }
+      else{
+        status = "processing...";
+        status_num = 3;
+        ddl.retryTime++;
+      }
+    }
+  }
+
+  //卖家行为，将钱打给卖家
+
+  function getpay(uint256 cid){
+    user m_user = users[user_id];
+    dataDetail ddl = m_user.dataDetails[cid];
+   if(status_num == 5){
+    seller_addr.send(ddl.payment);
+    status = "idle";
+    status_num = 0;
+   }
+  }
+}
+////////////////////////////////////////////////////////
+contract DataProcess {
+  int64 user_id;
+  int64 seller_id;
+  
+  struct User {
+    address addr;
+    int64 whichseller;
+    int64 data_id;
+  }
+
+  struct Seller{
+    address addr;
+    bytes32 status;
+    bytes32 input_path;
+    bytes32 output_path;
+    bytes32 url;
+    uint amount;
+  }
+
+  mapping (int64 => User) users;
+  mapping (int64 => Seller) sellers;
+
+  function DataProcess(){
+    seller_id = 0;
+    user_id = 0;
+  }
+
+  function registBuyer(int64 sid) returns (int64 cid){
+    Seller sl = sellers[sid];
+    if(sl.status == "idle"){
+      int64 uid = user_id++;
+      users[uid] = User(msg.sender,sid,0);
+      return uid;
+    }
+  }
+
+  function registSeller(bytes32 input,bytes32 output,bytes32 url) returns (int64 uid){
+    int64 sid = seller_id++;
+    sellers[sid] = Seller(msg.sender,"idle",input,output,url,0);
+    return sid;
+  }
+
+  function getItem(int64 sid,int64 item) returns (bytes32 p){
+    Seller sl = sellers[sid];
+    if(item == 1)
+      return sl.status;
+    if(item == 2)
+      return sl.input_path;
+    if(item == 3)
+      return sl.output_path;
+    if(item == 4)
+      return sl.url;
+  }
+
+  function changeStatusUser(int64 status,bool flag,bool,int64 id){
+      User ur = users[id];
+      Seller sl = sellers[ur.whichseller];
+      if(status == 1)
+        sl.status="checking data...";
+      if(status == 5 && flag)
+        sl.status = "confirm";
+      if(status == 5 && !flag)
+        sl.status = "processing...";
+      if(status == 3 && msg.value >= 20000){
+        sl.status = "processing...";
+        sl.amount = msg.value;
+        }
+    }
+    
+    function changeStatusSeller(int64 status,bool flag,bool,int64 id){
+      Seller sl = sellers[id];
+      if(status == 2 && flag)
+        sl.status = "ready";
+      if(status == 2 && !flag)
+        sl.status = "idle";
+      if(status == 4)
+        sl.status = "finished";
+      if(status == 6)
+        sl.addr.send(sl.amount);
+        sl.status = "idle";
+  }
+}
+
+
+/////////////////////////////////////////////latest
+
+
+contract DataProcess {
+  int8 trans_id;
+  struct Trans {
+    address user;
+    address seller;
+    bytes16 status;
+    uint amount;
+  }
+  mapping (int8 => Trans) transes;
+  function DataProcess(){
+    trans_id = 0;
+  }
+  function registSeller() returns (int8 uid){
+    int8 sid = trans_id++;
+    //Trans tr = transes[sid];
+    //tr.seller = msg.sender;
+    //tr.status = "idle"; 
+    return sid;
+  }
+  function registBuyer(int8 sid) returns (bool re){
+    Trans tr = transes[sid];
+    if(tr.status == "idle"){
+      tr.user = msg.sender;
+      return true;
+    }
+    else
+      return false;
+  }
+  function getStatus(int8 sid) returns (bytes16 p){
+    Trans tr = transes[sid];
+    return tr.status;
+  }
+  function callforProcess(int8 id){
+    Trans tr = transes[id];
+    tr.status = "processing...";
+  }
+  function finish(int8 id){
+    Trans tr = transes[id];
+    tr.status = "finished";
+  }
+  function confirm(int8 id){
+    Trans tr = transes[id];
+    if(tr.status == "confirm"){
+      tr.seller.send(tr.amount);
+      tr.status = "idle";
+      }
+  }
+}
+
+var _greeting = "Hello world!" ;
+
+var greeterContract = web3.eth.contract([{"constant":false,"inputs":[],"name":"kill","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"greet","outputs":[{"name":"","type":"string"}],"type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"type":"constructor"}]);
+var greeter = greeterContract.new(
+   _greeting,
+   {
+     from: web3.eth.accounts[0], 
+     data: '60606040526040516102b33803806102b38339016040526060805160600190602001505b5b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b806001600050908051906020019082805482825590600052602060002090601f01602090048101928215609e579182015b82811115609d5782518260005055916020019190600101906081565b5b50905060c5919060a9565b8082111560c1576000818150600090555060010160a9565b5090565b50505b506101dc806100d76000396000f360606040526000357c01000000000000000000000000000000000000000000000000000000009004806341c0e1b514610044578063cfae32171461005157610042565b005b61004f6004506100ca565b005b61005c60045061015e565b60405180806020018281038252838181518152602001915080519060200190808383829060006004602084601f0104600302600f01f150905090810190601f1680156100bc5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561015b57600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b60206040519081016040528060008152602001506001600050805480601f016020809104026020016040519081016040528092919081815260200182805480156101cd57820191906000526020600020905b8154815290600101906020018083116101b057829003601f168201915b505050505090506101d9565b9056', 
+     gas: 1000000
+   }, function(e, contract){
+    if (typeof contract.address != 'undefined') {
+         console.log(e, contract);
+         console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+    }
+ })
