@@ -310,7 +310,6 @@ while True:
 	if (m_filter == []):
 		# time.sleep(7)
 		print getStatus(sid)
-		continue
 	else:
 		sid = registSeller("eth_call")
 		sid -= 1
@@ -323,16 +322,12 @@ while True:
 			processData(datapath)
 			idle_flag = False
 			finish(sid)
-			continue
 		elif(m_status[:len("finished")] == "finished"):
 			idle_flag = True
 			print getStatus(sid)
 			print "The data process is complete!"
-			continue
 		else:
 			print "wait a minute..."
-			continue
-
 
 # print registSeller("eth_sendTransaction")
 # print registSeller("eth_call")

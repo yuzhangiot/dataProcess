@@ -222,7 +222,7 @@ def callforProcess(id):
 	#first, get coinbase address
 
 	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
-	params = [{"from": my_addr, "to": contract_addr,"value":3000000,"data": code_getpath_full}]
+	params = [{"from": my_addr, "to": contract_addr,"value":30000000,"data": code_getpath_full}]
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
@@ -361,8 +361,8 @@ def getFilterChanges(fid):
 sid=0
 datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
 getdatapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
-sentDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/test.jpg"
+sentDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/test.jpg"
 
 
 def buySingle(sellerid):
@@ -372,7 +372,7 @@ def buySingle(sellerid):
 		sid = sellerid
 		print "No. " + str(sid) + " has been choosen"
 		registUser(sid,"eth_sendTransaction")
-		# time.sleep(1)
+		time.sleep(5)
 		suc = registUser(sid,"eth_call")
 		if (suc == 1):
 			print "No. " + str(sid) + " has been successful connected!"
@@ -385,13 +385,14 @@ def buySingle(sellerid):
 	print "data transform complete!"
 	print "ask for processing..."
 	callforProcess(sid)
+	processCount = 0
+	proFlag = True
 	fid = createNewBlockFilter()
 	while True:
 		m_filter = getFilterChanges(fid)
 		if (m_filter == []):
-			# time.sleep(1)
+			time.sleep(5)
 			print getStatus(sid)
-			continue
 		else:
 			m_status = getStatus(sid)
 			print m_status
@@ -407,17 +408,25 @@ def buySingle(sellerid):
 					print m_status
 					print "data check failed,retry..."
 					callforProcess(sid)
-					continue
+			elif (m_status[:len("processing...")] == "processing..."):
+				print "right now, a minute!"
+			elif(processCount > 10 and proFlag):
+				callforProcess(sid)
+				proFlag = False
 			else:
 				print "wait a minute, data is processing..."
+				processCount += 1
+				if(processCount%10 == 0):
+					proFlag = True
 
 mytime = []
 i=0
 while (i < 3):
 	old = time.clock()
-	buySingle(6)
+	buySingle(13)
 	new = time.clock()
 	add = new - old
+	add *= 10000
 	mytime.append(add)
 	i += 1
 

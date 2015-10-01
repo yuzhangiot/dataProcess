@@ -74,7 +74,7 @@ def readData():
 	return result
 
 # datapath = home + "ether/test/book.jpg"
-storeData()
+# storeData()
 # processData(datapath)
 
 
