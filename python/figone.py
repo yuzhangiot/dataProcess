@@ -52,9 +52,9 @@ def storeData():
 	mytime = []
 
 	while (count < 100):
-		old = time.clock()
+		old = time.time()
 		processData(datapath)
-		new = time.clock()
+		new = time.time()
 		add = new - old
 		mytime.append(add)
 		count += 1
@@ -74,8 +74,16 @@ def readData():
 	return result
 
 # datapath = home + "ether/test/book.jpg"
-# storeData()
+storeData()
 # processData(datapath)
 
+
+# old = time.time()
+# print old
+# time.sleep(1)
+# new = time.time()
+# add = new -old
+# # add *= 10000
+# print add
 
 

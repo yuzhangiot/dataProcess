@@ -372,7 +372,7 @@ def buySingle(sellerid):
 		sid = sellerid
 		print "No. " + str(sid) + " has been choosen"
 		registUser(sid,"eth_sendTransaction")
-		time.sleep(5)
+		time.sleep(8)
 		suc = registUser(sid,"eth_call")
 		if (suc == 1):
 			print "No. " + str(sid) + " has been successful connected!"
@@ -391,7 +391,7 @@ def buySingle(sellerid):
 	while True:
 		m_filter = getFilterChanges(fid)
 		if (m_filter == []):
-			time.sleep(5)
+			# time.sleep(5)
 			print getStatus(sid)
 		else:
 			m_status = getStatus(sid)
@@ -410,23 +410,22 @@ def buySingle(sellerid):
 					callforProcess(sid)
 			elif (m_status[:len("processing...")] == "processing..."):
 				print "right now, a minute!"
-			elif(processCount > 10 and proFlag):
+			elif(processCount > 4 and proFlag):
 				callforProcess(sid)
 				proFlag = False
 			else:
 				print "wait a minute, data is processing..."
 				processCount += 1
-				if(processCount%10 == 0):
+				if(processCount%5 == 0):
 					proFlag = True
 
 mytime = []
 i=0
 while (i < 3):
-	old = time.clock()
-	buySingle(13)
-	new = time.clock()
+	old = time.time()
+	buySingle(20)
+	new = time.time()
 	add = new - old
-	add *= 10000
 	mytime.append(add)
 	i += 1
 

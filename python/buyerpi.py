@@ -16,6 +16,7 @@ except ImportError:
 
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+home = "/home/joseph/"
 txtfilename = "python/data/singleSMERdata.txt"
 
 typeList = {
@@ -356,13 +357,6 @@ def getFilterChanges(fid):
 	bid = de_result['result']
 	# pprint.pprint(addr)
 	return bid
-	
-# retriveData()
-sid=0
-datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
-getdatapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
-sentDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/test.jpg"
 
 
 def buySingle(sellerid):
@@ -419,14 +413,20 @@ def buySingle(sellerid):
 				if(processCount%10 == 0):
 					proFlag = True
 
+# retriveData()
+sid=0
+datapath = home + "ether/test/book.bmp"
+getdatapath = home + "ether/test/book.jpg"
+sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
+
 mytime = []
 i=0
 while (i < 3):
-	old = time.clock()
-	buySingle(13)
-	new = time.clock()
+	old = time.time()
+	buySingle(20)
+	new = time.time()
 	add = new - old
-	add *= 10000
 	mytime.append(add)
 	i += 1
 

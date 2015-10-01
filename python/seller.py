@@ -228,7 +228,7 @@ def filetype(filename):
 def checkData(datapath):
 	# datapath = getPath("input")
 
-	datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
+	datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/book.jpg"
 
 	re = filetype(datapath)
 	return re
@@ -238,7 +238,7 @@ def checkData(datapath):
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = "/home/joseph/ether/test/test.jpg")
+	img.save(filename = "/home/joseph/ether/test/book.jpg")
 
 #Create a filter
 def createNewBlockFilter():
@@ -299,7 +299,7 @@ registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
 sid = 0
 idle_flag = True
-datapath = "/home/joseph/ether/test/test.bmp"
+datapath = "/home/joseph/ether/test/book.bmp"
 m_status = "idle"
 print "registing...Please wait..."
 time.sleep(10)
@@ -308,7 +308,7 @@ while True:
 	m_filter = getFilterChanges(fid)
 	# print m_filter
 	if (m_filter == []):
-		# time.sleep(7)
+		time.sleep(1)
 		print getStatus(sid)
 	else:
 		sid = registSeller("eth_call")
