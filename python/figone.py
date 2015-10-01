@@ -15,10 +15,12 @@ except ImportError:
     # python 2
     from urllib import urlencode
 #convert bmp to jpg
+home = "/Users/joseph_zhang/"
+filename = "python/data/cool4data.txt"
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = "/Users/joseph_zhang/ether/test/test.jpg")
+	img.save(filename = home + "ether/test/test.jpg")
 
 def drawPic(mt):
 	figure(figsize=(8,6), dpi=80)
@@ -44,21 +46,36 @@ def drawPic(mt):
 
 	show()
 
-datapath = "/Users/joseph_zhang/ether/test/test.bmp"
-count = 0
-mytime = []
+def storeData():
+	datapath = home + "ether/test/test.bmp"
+	count = 0
+	mytime = []
 
-while (count < 100):
-	old = time.clock()
-	processData(datapath)
-	new = time.clock()
-	add = new - old
-	mytime.append(add)
-	count += 1
+	while (count < 100):
+		old = time.clock()
+		processData(datapath)
+		new = time.clock()
+		add = new - old
+		mytime.append(add)
+		count += 1
 
-mt = np.array(mytime)
+	# mt = np.array(mytime)
+
+	file_object = open(filename, 'w')
+	for item in mytime:
+		file_object.write('%s\n' % item)
+	file_object.close()
+
+def readData():
+	result=[]
+	with open(filename,'r') as f:
+		for line in f:
+			result.append(map(float,line.split(',')))
+	return result
+
+
+storeData()
 # processData(datapath)
-drawPic(mt)
 
 
 
