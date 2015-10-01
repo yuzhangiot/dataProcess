@@ -19,11 +19,11 @@ filename = "python/data/pidata.txt"
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = home + "ether/test/test.jpg")
+	img.save(filename = home + "ether/test/book.jpg")
 
 
 def storeData():
-	datapath = home + "ether/test/test.bmp"
+	datapath = home + "ether/test/book.bmp"
 	count = 0
 	mytime = []
 
