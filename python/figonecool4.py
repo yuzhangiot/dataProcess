@@ -20,7 +20,7 @@ filename = "python/data/cool4data.txt"
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = home + "ether/test/abc.jpg")
+	img.save(filename = home + "ether/test/book.jpg")
 
 def drawPic(mt):
 	figure(figsize=(8,6), dpi=80)
@@ -47,7 +47,7 @@ def drawPic(mt):
 	show()
 
 def storeData():
-	datapath = home + "ether/test/abc.bmp"
+	datapath = home + "ether/test/book.bmp"
 	count = 0
 	mytime = []
 
