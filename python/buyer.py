@@ -16,6 +16,7 @@ except ImportError:
 
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+txtfilename = "python/data/singleSMERdata.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -363,51 +364,67 @@ getdatapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 sentDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/"
 getDataurl = "joseph@192.168.10.182:/home/joseph/ether/test/test.jpg"
 
-while True:
-	seller_num = getSeller()
-	sid = randint(0,seller_num-1)
-	sid = 6
-	print "No. " + str(sid) + " has been choosen"
-	registUser(sid,"eth_sendTransaction")
-	time.sleep(10)
-	suc = registUser(sid,"eth_call")
-	if (suc == 1):
-		print "No. " + str(sid) + " has been successful connected!"
-		break
-	else:
-		print "No. " + str(sid) + " is busy, retry after 10s..."
-		continue
 
-transData(datapath,sentDataurl)
-print "data transform complete!"
-print "ask for processing..."
-callforProcess(sid)
-fid = createNewBlockFilter()
-while True:
-	m_filter = getFilterChanges(fid)
-	if (m_filter == []):
-		time.sleep(7)
-		print getStatus(sid)
-		continue
-	else:
-		m_status = getStatus(sid)
-		print m_status
-		if (m_status[:len("finished")] == "finished"):
-			retriveData(getDataurl,getdatapath)
-			c_result = checkData(getdatapath)
-			if (c_result == "EXT_JPG"):
-				confirmation(sid)
-				print m_status
-				print "data check complete"
-				break
-			else:
-				print m_status
-				print "data check failed,retry..."
-				callforProcess(sid)
-				continue
+def buySingle(sellerid):
+	while True:
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		sid = sellerid
+		print "No. " + str(sid) + " has been choosen"
+		registUser(sid,"eth_sendTransaction")
+		# time.sleep(1)
+		suc = registUser(sid,"eth_call")
+		if (suc == 1):
+			print "No. " + str(sid) + " has been successful connected!"
+			break
 		else:
-			print "wait a minute, data is processing..."
+			print "No. " + str(sid) + " is busy, retry after 10s..."
+			continue
 
+	transData(datapath,sentDataurl)
+	print "data transform complete!"
+	print "ask for processing..."
+	callforProcess(sid)
+	fid = createNewBlockFilter()
+	while True:
+		m_filter = getFilterChanges(fid)
+		if (m_filter == []):
+			# time.sleep(1)
+			print getStatus(sid)
+			continue
+		else:
+			m_status = getStatus(sid)
+			print m_status
+			if (m_status[:len("finished")] == "finished"):
+				retriveData(getDataurl,getdatapath)
+				c_result = checkData(getdatapath)
+				if (c_result == "EXT_JPG"):
+					confirmation(sid)
+					print m_status
+					print "data check complete"
+					break
+				else:
+					print m_status
+					print "data check failed,retry..."
+					callforProcess(sid)
+					continue
+			else:
+				print "wait a minute, data is processing..."
+
+mytime = []
+i=0
+while (i < 3):
+	old = time.clock()
+	buySingle(6)
+	new = time.clock()
+	add = new - old
+	mytime.append(add)
+	i += 1
+
+file_object = open(txtfilename, 'w')
+for item in mytime:
+	file_object.write('%s\n' % item)
+file_object.close()
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 # print checkData(datapath)
 # time.sleep(2)

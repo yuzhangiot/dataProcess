@@ -306,9 +306,9 @@ time.sleep(10)
 
 while True:
 	m_filter = getFilterChanges(fid)
-	print m_filter
+	# print m_filter
 	if (m_filter == []):
-		time.sleep(7)
+		# time.sleep(7)
 		print getStatus(sid)
 		continue
 	else:

@@ -16,11 +16,11 @@ except ImportError:
     from urllib import urlencode
 #convert bmp to jpg
 home = "/Users/joseph_zhang/"
-filename = "python/data/cool4data.txt"
+txtfilename = "python/data/cool4data.txt"
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = home + "ether/test/test.jpg")
+	img.save(filename = home + "ether/test/book.jpg")
 
 def drawPic(mt):
 	figure(figsize=(8,6), dpi=80)
@@ -47,7 +47,7 @@ def drawPic(mt):
 	show()
 
 def storeData():
-	datapath = home + "ether/test/test.bmp"
+	datapath = home + "ether/test/book.bmp"
 	count = 0
 	mytime = []
 
@@ -61,19 +61,19 @@ def storeData():
 
 	# mt = np.array(mytime)
 
-	file_object = open(filename, 'w')
+	file_object = open(txtfilename, 'w')
 	for item in mytime:
 		file_object.write('%s\n' % item)
 	file_object.close()
 
 def readData():
 	result=[]
-	with open(filename,'r') as f:
+	with open(txtfilename,'r') as f:
 		for line in f:
 			result.append(map(float,line.split(',')))
 	return result
 
-
+# datapath = home + "ether/test/book.jpg"
 storeData()
 # processData(datapath)
 
