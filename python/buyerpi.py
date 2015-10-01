@@ -414,26 +414,33 @@ def buySingle(sellerid):
 					proFlag = True
 
 # retriveData()
-sid=0
-datapath = home + "ether/test/book.bmp"
-getdatapath = home + "ether/test/book.jpg"
-sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
+# sid=0
+# datapath = home + "ether/test/book.bmp"
+# getdatapath = home + "ether/test/book.jpg"
+# sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
+# getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
 
-mytime = []
-i=0
-while (i < 3):
-	old = time.time()
-	buySingle(20)
-	new = time.time()
-	add = new - old
-	mytime.append(add)
-	i += 1
+# mytime = []
+# i=0
+# while (i < 3):
+# 	old = time.time()
+# 	buySingle(20)
+# 	new = time.time()
+# 	add = new - old
+# 	mytime.append(add)
+# 	i += 1
 
-file_object = open(txtfilename, 'w')
-for item in mytime:
-	file_object.write('%s\n' % item)
-file_object.close()
+# file_object = open(txtfilename, 'w')
+# for item in mytime:
+# 	file_object.write('%s\n' % item)
+# file_object.close()
+
+getVersion()
+
+
+
+
+
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 # print checkData(datapath)
 # time.sleep(2)
