@@ -52,16 +52,16 @@ def storeData():
 	mytime = []
 
 	while (count < 100):
-		old = time.clock()
+		old = time.time()
 		processData(datapath)
-		new = time.clock()
+		new = time.time()
 		add = new - old
 		mytime.append(add)
 		count += 1
 
 	# mt = np.array(mytime)
 
-	file_object = open(filename, 'w')
+	file_object = open(txtfilename, 'w')
 	for item in mytime:
 		file_object.write('%s\n' % item)
 	file_object.close()

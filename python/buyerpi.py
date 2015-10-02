@@ -416,8 +416,8 @@ def buySingle(sellerid):
 sid=0
 datapath = home + "ether/test/book.bmp"
 getdatapath = home + "ether/test/book.jpg"
-sentDataurl = "joseph@192.168.10.8:/home/pi/ether/test/"
-getDataurl = "joseph@192.168.10.8:/home/pi/ether/test/book.jpg"
+sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
 
 mytime = []
 i=0
