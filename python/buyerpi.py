@@ -122,9 +122,9 @@ def getSeller():
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
 	m_result = de_result.get('result')
-	data_change = int(m_result,16)
+	# data_change = int(m_result,16)
 	# pprint.pprint(addr)
-	return data_change
+	return m_result
 
 
 #regist as a user
@@ -157,9 +157,9 @@ def registUser(id,action):
 	m_result = de_result.get('result')
 	# convert hex to string
 	# data_change = binascii.a2b_hex(m_result[2:])
-	data_change = int(m_result,16)
+	# data_change = int(m_result,16)
 
-	return data_change
+	# return data_change
 
 def getStatus(id):
 	c = pycurl.Curl()
