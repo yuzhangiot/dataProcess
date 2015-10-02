@@ -35,7 +35,7 @@ def getVersion():
 
 	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
 	data = json.dumps({'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67})
-	print data
+	pprint.pprint(data)
 	# Form data must be provided already urlencoded.
 	# postfields = urlencode(post_data)
 	# Sets request method to POST,
@@ -105,7 +105,7 @@ def getSeller():
 
 	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_getStorageAt','params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	# Form data must be provided already urlencoded.
 	# postfields = urlencode(post_data)
 	# Sets request method to POST,
@@ -145,7 +145,7 @@ def registUser(id,action):
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':action,'params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
 	c.setopt(c.WRITEFUNCTION, raw_result.write)
@@ -227,7 +227,7 @@ def callforProcess(id):
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
 	c.setopt(c.WRITEFUNCTION, raw_result.write)
@@ -289,7 +289,7 @@ def confirmation(id):
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction",'params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
 	c.setopt(c.WRITEFUNCTION, raw_result.write)
@@ -364,20 +364,20 @@ def buySingle(sellerid):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
 		sid = sellerid
-		print "No. " + str(sid) + " has been choosen"
+		pprint.pprint("No. " + str(sid) + " has been choosen")
 		registUser(sid,"eth_sendTransaction")
 		time.sleep(5)
 		suc = registUser(sid,"eth_call")
 		if (suc == 1):
-			print "No. " + str(sid) + " has been successful connected!"
+			pprint.pprint("No. " + str(sid) + " has been successful connected!")
 			break
 		else:
-			print "No. " + str(sid) + " is busy, retry after 10s..."
+			pprint.pprint("No. " + str(sid) + " is busy, retry after 10s...")
 			continue
 
 	transData(datapath,sentDataurl)
-	print "data transform complete!"
-	print "ask for processing..."
+	pprint.pprint("data transform complete!")
+	pprint.pprint("ask for processing...")
 	callforProcess(sid)
 	processCount = 0
 	proFlag = True
@@ -386,29 +386,29 @@ def buySingle(sellerid):
 		m_filter = getFilterChanges(fid)
 		if (m_filter == []):
 			time.sleep(5)
-			print getStatus(sid)
+			pprint.pprint(getStatus(sid))
 		else:
 			m_status = getStatus(sid)
-			print m_status
+			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished"):
 				retriveData(getDataurl,getdatapath)
 				c_result = checkData(getdatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
-					print m_status
-					print "data check complete"
+					pprint.pprint(m_status)
+					pprint.pprint("data check complete")
 					break
 				else:
-					print m_status
-					print "data check failed,retry..."
+					pprint.pprint(m_status)
+					pprint.pprint("data check failed,retry...")
 					callforProcess(sid)
 			elif (m_status[:len("processing...")] == "processing..."):
-				print "right now, a minute!"
+				pprint.pprint "right now, a minute!"
 			elif(processCount > 10 and proFlag):
 				callforProcess(sid)
 				proFlag = False
 			else:
-				print "wait a minute, data is processing..."
+				pprint.pprint "wait a minute, data is processing..."
 				processCount += 1
 				if(processCount%10 == 0):
 					proFlag = True
