@@ -419,20 +419,24 @@ def buySingle(sellerid):
 				if(processCount%5 == 0):
 					proFlag = True
 
-mytime = []
-i=0
-while (i < 3):
-	old = time.time()
-	buySingle(20)
-	new = time.time()
-	add = new - old
-	mytime.append(add)
-	i += 1
+# mytime = []
+# i=0
+# while (i < 3):
+# 	old = time.time()
+# 	buySingle(20)
+# 	new = time.time()
+# 	add = new - old
+# 	mytime.append(add)
+# 	i += 1
 
-file_object = open(txtfilename, 'w')
-for item in mytime:
-	file_object.write('%s\n' % item)
-file_object.close()
+# file_object = open(txtfilename, 'w')
+# for item in mytime:
+# 	file_object.write('%s\n' % item)
+# file_object.close()
+
+print getSeller()
+
+
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 # print checkData(datapath)
 # time.sleep(2)

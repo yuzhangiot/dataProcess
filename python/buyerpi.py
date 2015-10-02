@@ -92,7 +92,7 @@ def getSha3Data(strData):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# pprint.pprint(addr)
 	return m_result
 
@@ -121,7 +121,7 @@ def getSeller():
 	#def getpath():
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	data_change = int(m_result,16)
 	# pprint.pprint(addr)
 	return data_change
@@ -154,7 +154,7 @@ def registUser(id,action):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# convert hex to string
 	# data_change = binascii.a2b_hex(m_result[2:])
 	data_change = int(m_result,16)
@@ -187,7 +187,7 @@ def getStatus(id):
 	#Decode result
 	de_result = json.loads(raw_result_path.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# convert hex to string
 	datapath = binascii.a2b_hex(m_result[2:])
 
@@ -236,7 +236,7 @@ def callforProcess(id):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	# m_result = de_result['result']
+	# m_result = de_result.get('result')
 	# convert hex to string
 	# data_change = binascii.a2b_hex(m_result[2:])
 
@@ -298,7 +298,7 @@ def confirmation(id):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# convert hex to string
 	data_change = binascii.a2b_hex(m_result[2:])
 	# data_change = int(m_result,16)
@@ -413,7 +413,6 @@ def buySingle(sellerid):
 				if(processCount%10 == 0):
 					proFlag = True
 
-retriveData()
 sid=0
 datapath = home + "ether/test/book.bmp"
 getdatapath = home + "ether/test/book.jpg"
