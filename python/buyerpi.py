@@ -404,13 +404,13 @@ def buySingle(sellerid):
 					callforProcess(sid)
 			elif (m_status[:len("processing...")] == "processing..."):
 				pprint.pprint("right now, a minute!")
-			elif(processCount > 10 and proFlag):
+			elif(processCount > 5 and proFlag):
 				callforProcess(sid)
 				proFlag = False
 			else:
 				pprint.pprint("wait a minute, data is processing...")
 				processCount += 1
-				if(processCount%10 == 0):
+				if(processCount%5 == 0):
 					proFlag = True
 
 sid=0
