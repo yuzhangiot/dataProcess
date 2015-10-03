@@ -381,6 +381,7 @@ def buySingle(sellerid):
 	callforProcess(sid)
 	processCount = 0
 	proFlag = True
+	confirmFlag = False
 	fid = createNewBlockFilter()
 	while True:
 		m_filter = getFilterChanges(fid)
@@ -390,14 +391,14 @@ def buySingle(sellerid):
 		else:
 			m_status = getStatus(sid)
 			pprint.pprint(m_status)
-			if (m_status[:len("finished")] == "finished"):
+			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				retriveData(getDataurl,getdatapath)
 				c_result = checkData(getdatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
+					confirmFlag = True
 					pprint.pprint(m_status)
 					pprint.pprint("data check complete")
-					break
 				else:
 					pprint.pprint(m_status)
 					pprint.pprint("data check failed,retry...")
@@ -407,6 +408,9 @@ def buySingle(sellerid):
 			elif(processCount > 5 and proFlag):
 				callforProcess(sid)
 				proFlag = False
+			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
+				confirmFlag = False
+				break
 			else:
 				pprint.pprint("wait a minute, data is processing...")
 				processCount += 1
