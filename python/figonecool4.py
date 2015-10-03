@@ -17,10 +17,17 @@ except ImportError:
 #convert bmp to jpg
 home = "/home/joseph/"
 filename = "python/data/cool4data.txt"
+bmpnum = 1
 
 def processData(datapath):
 	img = Image(filename = datapath)
 	img.save(filename = home + "ether/test/book.jpg")
+
+def processBranchData(num,datapath):
+	i = 0
+	while (i<num):
+		processData(datapath)
+		i += 1
 
 def drawPic(mt):
 	figure(figsize=(8,6), dpi=80)
@@ -53,7 +60,8 @@ def storeData():
 
 	while (count < 100):
 		old = time.time()
-		processData(datapath)
+		# processData(datapath)
+		processBranchData(bmpnum,datapath)
 		new = time.time()
 		add = new - old
 		mytime.append(add)

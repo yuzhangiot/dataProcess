@@ -202,13 +202,6 @@ def transData(datapath,sendDataurl):
 	else:
 		return 0
 
-def retriveData(getDataurl,getdatapath):
-	p = subprocess.call(["scp",getDataurl,getdatapath])
-	if (p):
-		return 1
-	else:
-		return 0
-
 def callforProcess(id):
 	c = pycurl.Curl()
 	raw_result = BytesIO()
@@ -358,6 +351,12 @@ def getFilterChanges(fid):
 	# pprint.pprint(addr)
 	return bid
 
+def transBranchData(num,datapath,sentDataurl):
+	i = 0
+	while (i<num):
+		transData(datapath,sentDataurl)
+		i += 1
+
 
 def buySingle(sellerid):
 	while True:
@@ -375,7 +374,8 @@ def buySingle(sellerid):
 			pprint.pprint("No. " + str(sid) + " is busy, retry after 10s...")
 			continue
 
-	transData(datapath,sentDataurl)
+	# transData(datapath,sentDataurl)
+	transBranchData(bmpnum,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
 	callforProcess(sid)
@@ -392,7 +392,8 @@ def buySingle(sellerid):
 			m_status = getStatus(sid)
 			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
-				retriveData(getDataurl,getdatapath)
+				# transData(getDataurl,getdatapath)
+				transBranchData(bmpnum,getDataurl,getdatapath)
 				c_result = checkData(getdatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
@@ -405,7 +406,7 @@ def buySingle(sellerid):
 					callforProcess(sid)
 			elif (m_status[:len("processing...")] == "processing..."):
 				pprint.pprint("right now, a minute!")
-			elif(processCount > 5 and proFlag):
+			elif(processCount > 3 and proFlag):
 				callforProcess(sid)
 				proFlag = False
 			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
@@ -414,10 +415,11 @@ def buySingle(sellerid):
 			else:
 				pprint.pprint("wait a minute, data is processing...")
 				processCount += 1
-				if(processCount%5 == 0):
+				if(processCount%3 == 0):
 					proFlag = True
 
 sid=0
+bmpnum = 1
 datapath = home + "ether/test/book.bmp"
 getdatapath = home + "ether/test/book.jpg"
 sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"

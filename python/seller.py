@@ -240,6 +240,12 @@ def processData(datapath):
 	img = Image(filename = datapath)
 	img.save(filename = "/home/joseph/ether/test/book.jpg")
 
+def processBranchData(num,datapath):
+	i = 0
+	while (i<num):
+		processData(datapath)
+		i += 1
+
 #Create a filter
 def createNewBlockFilter():
 	c = pycurl.Curl()
@@ -298,6 +304,7 @@ def getFilterChanges(fid):
 registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
 sid = 0
+bmpnum = 1
 idle_flag = True
 datapath = "/home/joseph/ether/test/book.bmp"
 m_status = "idle"
@@ -319,7 +326,8 @@ while True:
 		print idle_flag
 		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
 			print "start processing..."
-			processData(datapath)
+			# processData(datapath)
+			processBranchData(bmpnum,datapath)
 			idle_flag = False
 			finish(sid)
 		elif((m_status[:len("processing...")] == "processing...") and (idle_flag == False)):

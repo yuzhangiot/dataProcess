@@ -16,10 +16,17 @@ except ImportError:
 #convert bmp to jpg
 home = "/home/pi/"
 filename = "python/data/pidata.txt"
+bmpnum = 1
 
 def processData(datapath):
 	img = Image(filename = datapath)
 	img.save(filename = home + "ether/test/book.jpg")
+
+def processBranchData(num,datapath):
+	i = 0
+	while (i<num):
+		processData(datapath)
+		i += 1
 
 
 def storeData():
@@ -29,7 +36,8 @@ def storeData():
 
 	while (count < 100):
 		old = time.time()
-		processData(datapath)
+		# processData(datapath)
+		processBranchData(bmpnum,datapath)
 		new = time.time()
 		add = new - old
 		mytime.append(add)
