@@ -421,7 +421,7 @@ def buySingle(sellerid):
 					proFlag = True
 
 sid=0
-bmpnum = 10
+bmpnum = 50
 datapath = home + "ether/test/book.bmp"
 getdatapath = home + "ether/test/book.jpg"
 sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
@@ -431,7 +431,7 @@ mytime = []
 i=0
 while (i < 50):
 	old = time.time()
-	buySingle(32)
+	buySingle(33)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
