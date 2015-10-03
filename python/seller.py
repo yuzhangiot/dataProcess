@@ -322,6 +322,8 @@ while True:
 			processData(datapath)
 			idle_flag = False
 			finish(sid)
+		elif((m_status[:len("processing...")] == "processing...") and (idle_flag == False)):
+			finish(sid)
 		elif(m_status[:len("finished")] == "finished"):
 			idle_flag = True
 			print getStatus(sid)
