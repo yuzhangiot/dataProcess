@@ -16,7 +16,7 @@ except ImportError:
     from urllib import urlencode
 #convert bmp to jpg
 home = "/home/joseph/"
-filename = "python/data/cool4data.txt"
+txtfilename = "python/data/cool4data.txt"
 bmpnum = 1
 
 def processData(datapath):
@@ -76,7 +76,7 @@ def storeData():
 
 def readData():
 	result=[]
-	with open(filename,'r') as f:
+	with open(txtfilename,'r') as f:
 		for line in f:
 			result.append(map(float,line.split(',')))
 	return result
