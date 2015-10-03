@@ -1,0 +1,65 @@
+<!doctype>
+<html>
+
+<head>
+<script type="text/javascript" src="../../bower/web3/dist/web3.js"></script>
+<script type="text/javascript">
+    var web3 = require('web3');
+    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8101"));
+    // solidity code code
+    var _greeting = "Hello world!";
+
+    function createExampleContract() {
+        // hide create button
+        document.getElementById('create').style.visibility = 'hidden'; 
+        // let's assume that coinbase is our account
+        web3.eth.defaultAccount = web3.eth.coinbase;
+        var watch = web3.eth.filter('latest');
+        // create contract
+        document.getElementById('status').innerText = "transaction sent, waiting for confirmation";
+        //add web code from here
+
+        var dataprocessContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"id","type":"int256"}],"name":"confirm","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"id","type":"int256"}],"name":"callforProcess","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"id","type":"int256"}],"name":"finish","outputs":[],"type":"function"},{"constant":false,"inputs":[{"name":"sid","type":"int256"}],"name":"getStatus","outputs":[{"name":"p","type":"bytes16"}],"type":"function"},{"constant":false,"inputs":[],"name":"registSeller","outputs":[{"name":"uid","type":"int256"}],"type":"function"},{"constant":false,"inputs":[{"name":"sid","type":"int256"}],"name":"registBuyer","outputs":[{"name":"re","type":"bool"}],"type":"function"},{"inputs":[],"type":"constructor"}]);
+        var myContract = dataprocessContract.new(
+           {
+             from: web3.eth.accounts[0], 
+             data: '60606040525b60006000600050819055505b6105908061001f6000396000f360606040523615610074576000357c0100000000000000000000000000000000000000000000000000000000900480631773812214610076578063333ab78c1461008957806382cedb311461009c578063c302cb77146100af578063e0c7fdbb146100d6578063f8bf940a146100f757610074565b005b6100876004803590602001506101f6565b005b61009a60048035906020015061042c565b005b6100ad60048035906020015061011e565b005b6100c060048035906020015061032c565b6040518082815260200191505060405180910390f35b6100e16004506104c3565b6040518082815260200191505060405180910390f35b61010860048035906020015061037a565b6040518082815260200191505060405180910390f35b60006001600050600083815260200190815260200160002060005090508060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156101f1577f66696e69736865640000000000000000000000000000000000000000000000008160020160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055505b5b5050565b60006001600050600083815260200190815260200160002060005090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415610327578060010160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1660008260030160005054604051809050600060405180830381858888f19350505050507f69646c65000000000000000000000000000000000000000000000000000000008160020160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055505b5b5050565b600060006001600050600084815260200190815260200160002060005090508060020160009054906101000a9004700100000000000000000000000000000000029150610374565b50919050565b600060006001600050600084815260200190815260200160002060005090507f69646c65000000000000000000000000000000000000000000000000000000008160020160009054906101000a900470010000000000000000000000000000000002141561041c57338160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055506001915061042656610425565b60009150610426565b5b50919050565b6000600160005060008381526020019081526020016000206000509050614e20341015156104be577f70726f63657373696e672e2e2e000000000000000000000000000000000000008160020160006101000a8154816fffffffffffffffffffffffffffffffff0219169083700100000000000000000000000000000000900402179055503481600301600050819055505b5b5050565b600060006000600060008181505480929190600101919050559150600160005060008381526020019081526020016000206000509050338160010160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055507f69646c65000000000000000000000000000000000000000000000000000000008160020160006101000a8154816fffffffffffffffffffffffffffffffff02191690837001000000000000000000000000000000009004021790555081925061058b565b50509056', 
+             gas: 1000000
+           }, function(e, contract){
+            if (typeof contract.address != 'undefined') {
+                 console.log(e, contract);
+                 console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+
+                 document.getElementById('status').innerText = 'Mined!';
+                 document.getElementById('code').innerText = 'Contract mined! address: ' + contract.address;
+                 document.getElementById('call').style.visibility = 'visible';
+            }
+         })
+        //end here
+
+    }
+    function callExampleContract() {
+        // this should be generated by ethereum
+        var param = parseInt(document.getElementById('value').value);
+        // call the contract
+        var res = myContract.multiply(param);
+        document.getElementById('result').innerText = res.toString(10);
+    }
+</script>
+</head>
+<body>
+    <h1>contract</h1>
+    <div id="code"></div> 
+    <div id="status"></div>
+    <div id='create'>
+        <button type="button" onClick="createExampleContract();">create example contract</button>
+    </div>
+    <div id='call' style='visibility: hidden;'>
+        <input type="number" id="value" onkeyup='callExampleContract()'></input>
+    </div>
+    <div id="result"></div>
+</body>
+</html>
+
+
+

@@ -15,7 +15,8 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x8a82740b5b528475e34c5b2bf342554c06c10e56'
+contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+txtfilename = "python/data/singleSMERdata.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -220,7 +221,8 @@ def callforProcess(id):
 	#get all params needed in this transaction
 	#first, get coinbase address
 
-	params = [{"from": my_addr, "to": contract_addr,"value":hex(30000),"data": code_getpath_full}]
+	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
+	params = [{"from": my_addr, "to": contract_addr,"value":30000000,"data": code_getpath_full}]
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
@@ -359,53 +361,81 @@ def getFilterChanges(fid):
 sid=0
 datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
 getdatapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
-sentDataurl = "joseph@192.168.10.154:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.154:/home/joseph/ether/test/test.jpg"
+sentDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/test.jpg"
 
-while True:
-	seller_num = getSeller()
-	sid = randint(0,seller_num-1)
-	sid = 12
-	print "No. " + str(sid) + " has been choosen"
-	registUser(sid,"eth_sendTransaction")
-	time.sleep(10)
-	suc = registUser(sid,"eth_call")
-	if (suc == 1):
-		print "No. " + str(sid) + " has been successful connected!"
-		break
-	else:
-		print "No. " + str(sid) + " is busy, retry after 10s..."
-		continue
 
-transData(datapath,sentDataurl)
-print "data transform complete!"
-print "ask for processing..."
-callforProcess(sid)
-fid = createNewBlockFilter()
-while True:
-	m_filter = getFilterChanges(fid)
-	if (m_filter == []):
-		time.sleep(7)
-		print getStatus(sid)
-		continue
-	else:
-		m_status = getStatus(sid)
-		print m_status
-		if (m_status[:len("finished")] == "finished"):
-			retriveData(getDataurl,getdatapath)
-			c_result = checkData(getdatapath)
-			if (c_result == "EXT_JPG"):
-				confirmation(sid)
-				print m_status
-				print "data check complete"
-				break
-			else:
-				print m_status
-				print "data check failed,retry..."
-				callforProcess(sid)
-				continue
+def buySingle(sellerid):
+	while True:
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		sid = sellerid
+		print "No. " + str(sid) + " has been choosen"
+		registUser(sid,"eth_sendTransaction")
+		time.sleep(8)
+		suc = registUser(sid,"eth_call")
+		if (suc == 1):
+			print "No. " + str(sid) + " has been successful connected!"
+			break
 		else:
-			print "wait a minute, data is processing..."
+			print "No. " + str(sid) + " is busy, retry after 10s..."
+			continue
+
+	transData(datapath,sentDataurl)
+	print "data transform complete!"
+	print "ask for processing..."
+	callforProcess(sid)
+	processCount = 0
+	proFlag = True
+	fid = createNewBlockFilter()
+	while True:
+		m_filter = getFilterChanges(fid)
+		if (m_filter == []):
+			# time.sleep(5)
+			print getStatus(sid)
+		else:
+			m_status = getStatus(sid)
+			print m_status
+			if (m_status[:len("finished")] == "finished"):
+				retriveData(getDataurl,getdatapath)
+				c_result = checkData(getdatapath)
+				if (c_result == "EXT_JPG"):
+					confirmation(sid)
+					print m_status
+					print "data check complete"
+					break
+				else:
+					print m_status
+					print "data check failed,retry..."
+					callforProcess(sid)
+			elif (m_status[:len("processing...")] == "processing..."):
+				print "right now, a minute!"
+			elif(processCount > 4 and proFlag):
+				callforProcess(sid)
+				proFlag = False
+			else:
+				print "wait a minute, data is processing..."
+				processCount += 1
+				if(processCount%5 == 0):
+					proFlag = True
+
+mytime = []
+i=0
+while (i < 3):
+	old = time.time()
+	buySingle(23)
+	new = time.time()
+	add = new - old
+	mytime.append(add)
+	i += 1
+
+file_object = open(txtfilename, 'w')
+for item in mytime:
+	file_object.write('%s\n' % item)
+file_object.close()
+
+# print getSeller()
+
 
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 # print checkData(datapath)

@@ -32,16 +32,22 @@ contract DataProcess {
   }
   function callforProcess(int256 id){
     Trans tr = transes[id];
-    tr.status = "processing...";
-    tr.amount = msg.value;
+    if(msg.value >= 20000){
+        tr.status = "processing...";
+        tr.amount = msg.value;
+    }
   }
   function finish(int256 id){
     Trans tr = transes[id];
-    tr.status = "finished";
+    if(msg.sender == tr.seller){
+        tr.status = "finished";
+    }
   }
   function confirm(int256 id){
     Trans tr = transes[id];
-    tr.seller.send(tr.amount);
-    tr.status = "idle";
+    if(msg.sender == tr.user){
+        tr.seller.send(tr.amount);
+        tr.status = "idle";
+    }
   }
 }

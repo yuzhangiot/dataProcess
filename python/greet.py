@@ -15,7 +15,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+contract_addr = '0x357e53453dd03b757c1de4f4ef2f5be3c46ad9d3'
 # identiy the file type
 
 typeList = {
@@ -228,7 +228,7 @@ def filetype(filename):
 def checkData(datapath):
 	# datapath = getPath("input")
 
-	datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/book.jpg"
+	datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
 
 	re = filetype(datapath)
 	return re
@@ -238,13 +238,7 @@ def checkData(datapath):
 
 def processData(datapath):
 	img = Image(filename = datapath)
-	img.save(filename = "/home/joseph/ether/test/book.jpg")
-
-def processBranchData(num,datapath):
-	i = 0
-	while (i<num):
-		processData(datapath)
-		i += 1
+	img.save(filename = "test.jpg")
 
 #Create a filter
 def createNewBlockFilter():
@@ -299,46 +293,40 @@ def getFilterChanges(fid):
 	# pprint.pprint(addr)
 	return bid
 
+def getString():
+	c = pycurl.Curl()
+	raw_result_path = BytesIO()
+	raw_result_url = BytesIO()
+	c.setopt(c.URL, hosturl)
+	my_addr = getLocalAddr()
+	code_getpath_raw = getSha3Data("greet()")
+	code_getpath = code_getpath_raw[:10]
+	#get all params needed in this transaction
+	#first, get coinbase address
+
+	params = [{"to": contract_addr,"data": code_getpath}]
 
 
-registSeller("eth_sendTransaction")
-fid = createNewBlockFilter()
-sid = 0
-bmpnum = 10
-idle_flag = True
-datapath = "/home/joseph/ether/test/book.bmp"
-m_status = "idle"
-print "registing...Please wait..."
-time.sleep(10)
+	data = json.dumps({'jsonrpc':'2.0','method':'eth_call','params':params,'id':1})
+	c.setopt(pycurl.POST, 1)
+	c.setopt(c.POSTFIELDS, data)
+	c.setopt(c.WRITEFUNCTION, raw_result_path.write)
 
-while True:
-	m_filter = getFilterChanges(fid)
-	# print m_filter
-	if (m_filter == []):
-		time.sleep(1)
-		print getStatus(sid)
-	else:
-		sid = registSeller("eth_call")
-		sid -= 1
-		print "I'm seller " + str(sid)
-		m_status = getStatus(sid)
-		print m_status
-		print idle_flag
-		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
-			print "start processing..."
-			# processData(datapath)
-			processBranchData(bmpnum,datapath)
-			idle_flag = False
-			finish(sid)
-		elif((m_status[:len("processing...")] == "processing...") and (idle_flag == False)):
-			finish(sid)
-		elif(m_status[:len("finished")] == "finished"):
-			idle_flag = True
-			print getStatus(sid)
-			print "The data process is complete!"
-		else:
-			print "wait a minute..."
+	c.perform()
+	#Decode result
+	de_result = json.loads(raw_result_path.getvalue())
+	#abstract the addr alone
+	m_result = de_result['result']
+	# convert hex to string
+	datapath = binascii.a2b_hex(m_result[2:])
 
+	c.perform()
+	c.close()
+	return datapath
+
+
+
+print getString()
 # print registSeller("eth_sendTransaction")
 # print registSeller("eth_call")
 # print getStatus(0)
@@ -352,23 +340,3 @@ while True:
 # processData(datapath)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # try:
-    #     while True:
-    #         time.sleep(1)
-    # except KeyboardInterrupt:
-    #     observer.stop()
-    # observer.join()

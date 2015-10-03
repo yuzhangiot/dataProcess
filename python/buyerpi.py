@@ -2,11 +2,11 @@ import pycurl
 import json
 import binascii
 import subprocess
-import struct
 import time
+import struct
 from io import BytesIO
+from random import randint
 import pprint
-from wand.image import Image
 try:
     # python 3
     from urllib.parse import urlencode
@@ -16,7 +16,8 @@ except ImportError:
 
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
-# identiy the file type
+home = "/home/pi/"
+txtfilename = "python/data/singleSMERdata_10.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -34,7 +35,7 @@ def getVersion():
 
 	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
 	data = json.dumps({'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67})
-	print data
+	pprint.pprint(data)
 	# Form data must be provided already urlencoded.
 	# postfields = urlencode(post_data)
 	# Sets request method to POST,
@@ -54,7 +55,7 @@ def getVersion():
 	# pprint.pprint(addr)
 	return addr
 
-	# Get local address
+# Get local address
 def getLocalAddr():
 	c = pycurl.Curl()
 	raw_result = BytesIO()
@@ -91,27 +92,60 @@ def getSha3Data(strData):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# pprint.pprint(addr)
 	return m_result
 
-#Regist as a seller
-def registSeller(action):
+#Get available sellers
+def getSeller():
+	c = pycurl.Curl()
+	c.setopt(c.URL, hosturl)
+	raw_result = BytesIO()
+	params = [contract_addr,"0x0"]
+
+	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
+	data = json.dumps({'jsonrpc':'2.0','method':'eth_getStorageAt','params':params,'id':1})
+	pprint.pprint(data)
+	# Form data must be provided already urlencoded.
+	# postfields = urlencode(post_data)
+	# Sets request method to POST,
+	# Content-Type header to application/x-www-form-urlencoded
+	# and data to send in request body.
+	c.setopt(pycurl.POST, 1)
+	c.setopt(c.POSTFIELDS, data)
+	c.setopt(c.WRITEFUNCTION, raw_result.write)
+
+	c.perform()
+	c.close()
+	# get raw path from contract
+	#def getpath():
+	de_result = json.loads(raw_result.getvalue())
+	#abstract the addr alone
+	m_result = de_result.get('result')
+	# data_change = int(m_result,16)
+	# pprint.pprint(addr)
+	return m_result
+
+
+#regist as a user
+def registUser(id,action):
 	c = pycurl.Curl()
 	raw_result = BytesIO()
 	c.setopt(c.URL, hosturl)
 	my_addr = getLocalAddr()
-	code_getpath_raw = getSha3Data("registSeller()")
+	code_getpath_raw = getSha3Data("registBuyer(int256)")
 	code_getpath = code_getpath_raw[:10]
-
+	arg_01_raw = hex(id)
+	arg_01 = (66 - len(arg_01_raw)) * '0' + arg_01_raw[2:]
+	code_getpath_full = code_getpath + arg_01
 	#get all params needed in this transaction
 	#first, get coinbase address
 
-	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath}]
+	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath_full}]
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':action,'params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
 	c.setopt(c.WRITEFUNCTION, raw_result.write)
@@ -120,15 +154,12 @@ def registSeller(action):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# convert hex to string
 	# data_change = binascii.a2b_hex(m_result[2:])
 	data_change = int(m_result,16)
 
 	return data_change
-
-
-#get status from contract
 
 def getStatus(id):
 	c = pycurl.Curl()
@@ -156,7 +187,7 @@ def getStatus(id):
 	#Decode result
 	de_result = json.loads(raw_result_path.getvalue())
 	#abstract the addr alone
-	m_result = de_result['result']
+	m_result = de_result.get('result')
 	# convert hex to string
 	datapath = binascii.a2b_hex(m_result[2:])
 
@@ -164,12 +195,19 @@ def getStatus(id):
 	c.close()
 	return datapath
 
-def finish(id):
+def transData(datapath,sendDataurl):
+	p = subprocess.call(["scp",datapath,sendDataurl])
+	if (p):
+		return 1
+	else:
+		return 0
+
+def callforProcess(id):
 	c = pycurl.Curl()
 	raw_result = BytesIO()
 	c.setopt(c.URL, hosturl)
 	my_addr = getLocalAddr()
-	code_getpath_raw = getSha3Data("finish(int256)")
+	code_getpath_raw = getSha3Data("callforProcess(int256)")
 	code_getpath = code_getpath_raw[:10]
 	arg_01_raw = hex(id)
 	arg_01 = (66 - len(arg_01_raw)) * '0' + arg_01_raw[2:]
@@ -177,11 +215,12 @@ def finish(id):
 	#get all params needed in this transaction
 	#first, get coinbase address
 
-	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath_full}]
+	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
+	params = [{"from": my_addr, "to": contract_addr,"value":30000000,"data": code_getpath_full}]
 
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
-	print data
+	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
 	c.setopt(c.WRITEFUNCTION, raw_result.write)
@@ -190,13 +229,11 @@ def finish(id):
 	#Decode result
 	de_result = json.loads(raw_result.getvalue())
 	#abstract the addr alone
-	# m_result = de_result['result']
+	# m_result = de_result.get('result')
 	# convert hex to string
 	# data_change = binascii.a2b_hex(m_result[2:])
 
 	return de_result
-
-
 
 def bytes2hex(bytes):
     num = len(bytes)
@@ -223,30 +260,45 @@ def filetype(filename):
     binfile.close()
     return ftype
 
-#checking the data validity
-
 def checkData(datapath):
-	# datapath = getPath("input")
-
-	datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/book.jpg"
-
 	re = filetype(datapath)
 	return re
 
 
-#convert bmp to jpg
+def confirmation(id):
+	c = pycurl.Curl()
+	raw_result = BytesIO()
+	c.setopt(c.URL, hosturl)
+	my_addr = getLocalAddr()
+	code_getpath_raw = getSha3Data("confirm(int256)")
+	code_getpath = code_getpath_raw[:10]
+	arg_01_raw = hex(id)
+	arg_01 = (66 - len(arg_01_raw)) * '0' + arg_01_raw[2:]
+	code_getpath_full = code_getpath + arg_01
+	#get all params needed in this transaction
+	#first, get coinbase address
 
-def processData(datapath):
-	img = Image(filename = datapath)
-	img.save(filename = "/home/joseph/ether/test/book.jpg")
+	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath_full}]
 
-def processBranchData(num,datapath):
-	i = 0
-	while (i<num):
-		processData(datapath)
-		i += 1
 
-#Create a filter
+	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction",'params':params,'id':1})
+	pprint.pprint(data)
+	c.setopt(pycurl.POST, 1)
+	c.setopt(c.POSTFIELDS, data)
+	c.setopt(c.WRITEFUNCTION, raw_result.write)
+
+	c.perform()
+	#Decode result
+	de_result = json.loads(raw_result.getvalue())
+	#abstract the addr alone
+	m_result = de_result.get('result')
+	# convert hex to string
+	data_change = binascii.a2b_hex(m_result[2:])
+	# data_change = int(m_result,16)
+
+	return data_change
+
+	#Create a filter
 def createNewBlockFilter():
 	c = pycurl.Curl()
 	c.setopt(c.URL, hosturl)
@@ -254,7 +306,6 @@ def createNewBlockFilter():
 
 	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_newBlockFilter','params':[],'id':73})
-	print data
 	# Form data must be provided already urlencoded.
 	# postfields = urlencode(post_data)
 	# Sets request method to POST,
@@ -278,6 +329,7 @@ def getFilterChanges(fid):
 	c = pycurl.Curl()
 	c.setopt(c.URL, hosturl)
 	raw_result = BytesIO()
+
 	# post_data = {'jsonrpc':'2.0','method':'web3_clientVersion','params':[],'id':67}
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_getFilterChanges','params':[fid],'id':73})
 	# Form data must be provided already urlencoded.
@@ -299,76 +351,113 @@ def getFilterChanges(fid):
 	# pprint.pprint(addr)
 	return bid
 
+def transBranchData(num,datapath,sentDataurl):
+	i = 0
+	while (i<num):
+		transData(datapath,sentDataurl)
+		i += 1
 
 
-registSeller("eth_sendTransaction")
-fid = createNewBlockFilter()
-sid = 0
-bmpnum = 10
-idle_flag = True
-datapath = "/home/joseph/ether/test/book.bmp"
-m_status = "idle"
-print "registing...Please wait..."
-time.sleep(10)
-
-while True:
-	m_filter = getFilterChanges(fid)
-	# print m_filter
-	if (m_filter == []):
-		time.sleep(1)
-		print getStatus(sid)
-	else:
-		sid = registSeller("eth_call")
-		sid -= 1
-		print "I'm seller " + str(sid)
-		m_status = getStatus(sid)
-		print m_status
-		print idle_flag
-		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
-			print "start processing..."
-			# processData(datapath)
-			processBranchData(bmpnum,datapath)
-			idle_flag = False
-			finish(sid)
-		elif((m_status[:len("processing...")] == "processing...") and (idle_flag == False)):
-			finish(sid)
-		elif(m_status[:len("finished")] == "finished"):
-			idle_flag = True
-			print getStatus(sid)
-			print "The data process is complete!"
+def buySingle(sellerid):
+	while True:
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		sid = sellerid
+		pprint.pprint("No. " + str(sid) + " has been choosen")
+		registUser(sid,"eth_sendTransaction")
+		time.sleep(5)
+		suc = registUser(sid,"eth_call")
+		if (suc == 1):
+			pprint.pprint("No. " + str(sid) + " has been successful connected!")
+			break
 		else:
-			print "wait a minute..."
+			pprint.pprint("No. " + str(sid) + " is busy, retry after 10s...")
+			continue
 
-# print registSeller("eth_sendTransaction")
-# print registSeller("eth_call")
+	# transData(datapath,sentDataurl)
+	transBranchData(bmpnum,datapath,sentDataurl)
+	pprint.pprint("data transform complete!")
+	pprint.pprint("ask for processing...")
+	callforProcess(sid)
+	processCount = 0
+	proFlag = True
+	confirmFlag = False
+	fid = createNewBlockFilter()
+	while True:
+		m_filter = getFilterChanges(fid)
+		if (m_filter == []):
+			time.sleep(5)
+			pprint.pprint(getStatus(sid))
+		else:
+			m_status = getStatus(sid)
+			pprint.pprint(m_status)
+			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
+				# transData(getDataurl,getdatapath)
+				transBranchData(bmpnum,getDataurl,getdatapath)
+				c_result = checkData(getdatapath)
+				if (c_result == "EXT_JPG"):
+					confirmation(sid)
+					confirmFlag = True
+					pprint.pprint(m_status)
+					pprint.pprint("data check complete")
+				else:
+					pprint.pprint(m_status)
+					pprint.pprint("data check failed,retry...")
+					callforProcess(sid)
+			elif (m_status[:len("processing...")] == "processing..."):
+				pprint.pprint("right now, a minute!")
+			elif(processCount > 3 and proFlag):
+				callforProcess(sid)
+				proFlag = False
+			elif (m_status[:len("finished")] == "finished" and (confirmFlag==True)):
+				confirmation(sid)
+			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
+				confirmFlag = False
+				break
+			else:
+				pprint.pprint("wait a minute, data is processing...")
+				processCount += 1
+				if(processCount%3 == 0):
+					proFlag = True
+
+sid=0
+bmpnum = 10
+datapath = home + "ether/test/book.bmp"
+getdatapath = home + "ether/test/book.jpg"
+sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
+getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
+
+mytime = []
+i=0
+while (i < 50):
+	old = time.time()
+	buySingle(32)
+	new = time.time()
+	add = new - old
+	mytime.append(add)
+	i += 1
+
+file_object = open(txtfilename, 'w')
+for item in mytime:
+	file_object.write('%s\n' % item)
+file_object.close()
+
+# getVersion()
+
+
+
+
+
+# datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
+# print checkData(datapath)
+# time.sleep(2)
+# print getSeller()
+# print registUser(0,"eth_sendTransaction")
+# print registUser(0,"eth_call")
 # print getStatus(0)
-# m = m[:len("processing...")]
-
-# print finish(0)
-
-# registSeller("eth_sendTransaction")
-
-# datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.bmp"
-# processData(datapath)
+# print callforProcess(0)
+# print confirmation(0)
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    # try:
-    #     while True:
-    #         time.sleep(1)
-    # except KeyboardInterrupt:
-    #     observer.stop()
-    # observer.join()
