@@ -17,7 +17,7 @@ except ImportError:
 #convert bmp to jpg
 home = "/home/joseph/"
 txtfilename = "python/data/cool4data_10.txt"
-bmpnum = 1
+bmpnum = 10
 
 def processData(datapath):
 	img = Image(filename = datapath)

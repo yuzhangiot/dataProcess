@@ -16,7 +16,7 @@ except ImportError:
 #convert bmp to jpg
 home = "/home/pi/"
 txtfilename = "python/data/pidata_10.txt"
-bmpnum = 1
+bmpnum = 10
 
 def processData(datapath):
 	img = Image(filename = datapath)
