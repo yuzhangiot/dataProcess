@@ -16,7 +16,7 @@ except ImportError:
     from urllib import urlencode
 #convert bmp to jpg
 home = "/home/joseph/"
-txtfilename = "python/data/cool4data.txt"
+txtfilename = "python/data/cool4data_10.txt"
 bmpnum = 1
 
 def processData(datapath):
@@ -58,7 +58,7 @@ def storeData():
 	count = 0
 	mytime = []
 
-	while (count < 100):
+	while (count < 50):
 		old = time.time()
 		# processData(datapath)
 		processBranchData(bmpnum,datapath)

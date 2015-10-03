@@ -429,7 +429,7 @@ getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
 
 mytime = []
 i=0
-while (i < 2):
+while (i < 50):
 	old = time.time()
 	buySingle(32)
 	new = time.time()
