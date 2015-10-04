@@ -247,7 +247,7 @@ def processBranchData(num,datapath):
 	while (i<num):
 		datapathBr = datapath + str(i) + ".bmp"
 		savepathBr = datapath + str(i) + ".jpg"
-		processData(datapath, savepathBr)
+		processData(datapathBr, savepathBr)
 		i += 1
 
 #Create a filter

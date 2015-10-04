@@ -197,7 +197,7 @@ def getStatus(id):
 	return datapath
 
 def transData(datapath,sendDataurl):
-	p = subprocess.call(["scp",datapath,sendDataurl])
+	# p = subprocess.call(["scp",datapath,sendDataurl])
 	os.system("scp" + " " + datapath + " " + sendDataurl)
 	# if (p):
 	# 	return 1
@@ -445,7 +445,7 @@ mytime = []
 i=0
 while (i < 2):
 	old = time.time()
-	buySingle(34)
+	buySingle(35)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
