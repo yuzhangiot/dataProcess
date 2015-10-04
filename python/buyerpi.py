@@ -18,7 +18,7 @@ except ImportError:
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 home = "/home/pi/"
-txtfilename = "python/data/singleSMERdata_50.txt"
+txtfilename = "python/data/singleSMERdata_10.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -408,7 +408,7 @@ def buySingle(sellerid):
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				# transData(getDataurl,getdatapath)
 				receiveBranchData(bmpnum,getDataurl,getdatapath)
-				c_result = checkData(getdatapath)
+				c_result = checkData(checkDatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
 					confirmFlag = True
@@ -438,14 +438,15 @@ sid=0
 bmpnum = 10
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
 sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
 getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 2):
+while (i < 50):
 	old = time.time()
-	buySingle(35)
+	buySingle(36)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
