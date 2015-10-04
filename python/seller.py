@@ -236,14 +236,18 @@ def checkData(datapath):
 
 #convert bmp to jpg
 
-def processData(datapath):
+def processData(datapath, savepath):
 	img = Image(filename = datapath)
-	img.save(filename = "/home/joseph/ether/test/book.jpg")
+	img.save(filename = savepath)
 
 def processBranchData(num,datapath):
 	i = 0
+	datapathBr = ""
+	savepathBr = ""
 	while (i<num):
-		processData(datapath)
+		datapathBr = datapath + str(i) + ".bmp"
+		savepathBr = datapath + str(i) + ".jpg"
+		processData(datapath, savepathBr)
 		i += 1
 
 #Create a filter
@@ -306,7 +310,7 @@ fid = createNewBlockFilter()
 sid = 0
 bmpnum = 10
 idle_flag = True
-datapath = "/home/joseph/ether/test/book.bmp"
+datapath = "/home/joseph/ether/test/book"
 m_status = "idle"
 print "registing...Please wait..."
 time.sleep(10)

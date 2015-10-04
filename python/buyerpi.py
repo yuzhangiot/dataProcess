@@ -353,9 +353,21 @@ def getFilterChanges(fid):
 
 def transBranchData(num,datapath,sentDataurl):
 	i = 0
+	datapathBr = ""
 	while (i<num):
-		transData(datapath,sentDataurl)
+		datapathmid = datapath + str(i) + ".bmp" + " "
+		datapathBr += datapathmid
 		i += 1
+	transData(datapathBr,sentDataurl)
+
+def receiveBranchData(num,dataurl,revDatapath):
+	i = 0
+	dataurlBr = ""
+	while (i<num):
+		dataurlmid = dataurl + str(i) + ".jpg" + " "
+		dataurlBr += dataurlmid
+		i += 1
+	transData(dataurlBr,revDatapath)
 
 
 def buySingle(sellerid):
@@ -393,7 +405,7 @@ def buySingle(sellerid):
 			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				# transData(getDataurl,getdatapath)
-				transBranchData(bmpnum,getDataurl,getdatapath)
+				receiveBranchData(bmpnum,getDataurl,getdatapath)
 				c_result = checkData(getdatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
@@ -421,17 +433,17 @@ def buySingle(sellerid):
 					proFlag = True
 
 sid=0
-bmpnum = 50
-datapath = home + "ether/test/book.bmp"
-getdatapath = home + "ether/test/book.jpg"
+bmpnum = 10
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
 sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
+getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 50):
+while (i < 2):
 	old = time.time()
-	buySingle(33)
+	buySingle(34)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
