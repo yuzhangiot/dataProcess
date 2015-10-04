@@ -7,6 +7,7 @@ import time
 from io import BytesIO
 import pprint
 from wand.image import Image
+import numpy as np
 from pylab import *
 try:
     # python 3
@@ -16,7 +17,7 @@ except ImportError:
     from urllib import urlencode
 #convert bmp to jpg
 home = "/Users/joseph_zhang/ether/sketch/gitdataprocess/"
-bmpnum = "1"
+# bmpnum = "1"
 # txtfilename = "python/data/cool4data.txt"
 
 def processData(datapath):
@@ -31,9 +32,9 @@ def drawPic(smer,pi,cool4):
 	X = np.linspace(1, 50, 50,endpoint=True)
 	# C,S = np.cos(X), np.sin(X)
 
-	plot(X, smer, color="blue", linewidth=1.0, linestyle="-", label="SMER")
-	plot(X, pi, color="green", linewidth=1.0, linestyle=":", label="RaspberryPi")
-	plot(X, cool4, color="red", linewidth=1.0, linestyle="--", label="Linux Server")
+	plot(X, smer, color="blue", linewidth=1.5, linestyle="-", label="SMER")
+	plot(X, pi, color="green", linewidth=1.5, linestyle=":", label="RaspberryPi")
+	plot(X, cool4, color="red", linewidth=1.5, linestyle="--", label="Linux Server")
 
 	# plot(X, S, color="green", linewidth=1.0, linestyle="-")
 
@@ -41,9 +42,36 @@ def drawPic(smer,pi,cool4):
 
 	xticks(np.linspace(0,50,6,endpoint=True))
 
-	ylim(-10,190)
+	ylim(-10,150)
 
-	yticks(np.linspace(-10.000,190,21,endpoint=True))
+	yticks(np.linspace(-10.000,150,17,endpoint=True))
+	legend(loc='upper left')
+
+	# savefig("exercice_2.png",dpi=72)
+
+	show()
+
+def drawPicTen(smer,pi,cool4):
+	figure(figsize=(8,6), dpi=80)
+
+	subplot(1,1,1)
+
+	X = np.linspace(1, 50, 50,endpoint=True)
+	# C,S = np.cos(X), np.sin(X)
+
+	plot(X, smer, color="blue", linewidth=1.5, linestyle="-", label="SMER")
+	plot(X, pi, color="green", linewidth=1.5, linestyle=":", label="RaspberryPi")
+	plot(X, cool4, color="red", linewidth=1.5, linestyle="--", label="Linux Server")
+
+	# plot(X, S, color="green", linewidth=1.0, linestyle="-")
+
+	xlim(0,50.0)
+
+	xticks(np.linspace(0,50,6,endpoint=True))
+
+	ylim(-20,360)
+
+	yticks(np.linspace(-20.000,360,20,endpoint=True))
 	legend(loc='upper left')
 
 	# savefig("exercice_2.png",dpi=72)
@@ -86,19 +114,35 @@ def myfilter(numlist):
 			result.append(item)
 	return result
 
-smerfile = home + "python/data/singleSMERdata_" + bmpnum + ".txt"
-smerdata = readData(smerfile)
-pifile = home + "python/data/pidata_" + bmpnum + ".txt"
-pidata = readData(pifile)
-cool4file = home + "python/data/cool4data_" + bmpnum + ".txt"
-cool4data = readData(cool4file)
+def readDataFromFile(bmpnum):
+	bmpnum = str(bmpnum)
+	smerfile = home + "python/data/singleSMERdata_" + bmpnum + ".txt"
+	smerdata = readData(smerfile)
+	pifile = home + "python/data/pidata_" + bmpnum + ".txt"
+	pidata = readData(pifile)
+	cool4file = home + "python/data/cool4data_" + bmpnum + ".txt"
+	cool4data = readData(cool4file)
+	return smerdata,pidata,cool4data
+
+def drawFigone():
+	smerdata,pidata,cool4data = readDataFromFile(1)
+	smerdatafilter = myfilter(smerdata)
+	pidatafilter = pidata[:50]
+	cool4datafilter = cool4data[:50]
+	drawPic(smerdatafilter,pidatafilter,cool4datafilter)
+
+def drawFigTwo():
+	smerdata,pidata,cool4data = readDataFromFile(10)
+	# print max(smerdata)
+	drawPicTen(smerdata,pidata,cool4data)
+drawFigone()
+# drawFigTwo()
 
 
-smerdatafilter = myfilter(smerdata)
-pidatafilter = pidata[:50]
-cool4datafilter = cool4data[:50]
+	# print np.mean(smerdatafilter)
+	# print np.mean(pidatafilter)
+	# print np.mean(cool4datafilter)
 
-drawPic(smerdatafilter,pidatafilter,cool4datafilter)
 
 
 # datapath = home + "ether/test/book.jpg"
