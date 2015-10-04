@@ -17,7 +17,7 @@ except ImportError:
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 home = "/home/pi/"
-txtfilename = "python/data/singleSMERdata_10.txt"
+txtfilename = "python/data/singleSMERdata_50.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
