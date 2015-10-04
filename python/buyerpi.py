@@ -4,6 +4,7 @@ import binascii
 import subprocess
 import time
 import struct
+import os
 from io import BytesIO
 from random import randint
 import pprint
@@ -197,10 +198,11 @@ def getStatus(id):
 
 def transData(datapath,sendDataurl):
 	p = subprocess.call(["scp",datapath,sendDataurl])
-	if (p):
-		return 1
-	else:
-		return 0
+	os.system("scp" + " " + datapath + " " + sendDataurl)
+	# if (p):
+	# 	return 1
+	# else:
+	# 	return 0
 
 def callforProcess(id):
 	c = pycurl.Curl()
