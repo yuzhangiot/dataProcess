@@ -135,8 +135,8 @@ def drawFigTwo():
 	smerdata,pidata,cool4data = readDataFromFile(10)
 	# print max(smerdata)
 	drawPicTen(smerdata,pidata,cool4data)
-drawFigone()
-# drawFigTwo()
+# drawFigone()
+drawFigTwo()
 
 
 	# print np.mean(smerdatafilter)

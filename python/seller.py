@@ -308,7 +308,7 @@ def getFilterChanges(fid):
 registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
 sid = 0
-bmpnum = 10
+bmpnum = 50
 idle_flag = True
 datapath = "/home/joseph/ether/test/book"
 m_status = "idle"
