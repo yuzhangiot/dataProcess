@@ -448,7 +448,7 @@ mytime = []
 i=0
 while (i < 2):
 	old = time.time()
-	buySingle(40)
+	buySingle(41)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
