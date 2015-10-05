@@ -107,8 +107,10 @@ def readData(filename):
 
 def myfilter(numlist):
 	result = []
+	sortlist = sorted(numlist)
+	midnum = sortlist[49]
 	for item in numlist:
-		if (item[0]>112):
+		if (item[0]>midnum[0]):
 			continue
 		else:
 			result.append(item)
@@ -135,8 +137,8 @@ def drawFigTwo():
 	smerdata,pidata,cool4data = readDataFromFile(10)
 	# print max(smerdata)
 	drawPicTen(smerdata,pidata,cool4data)
-# drawFigone()
-drawFigTwo()
+drawFigone()
+# drawFigTwo()
 
 
 	# print np.mean(smerdatafilter)
