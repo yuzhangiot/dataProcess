@@ -446,10 +446,16 @@ mytime = []
 i=0
 while (i < 75):
 	old = time.time()
-	buySingle(39)
+	buySingle(40)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
+
+	file_object = open(txtfilename, 'w')
+	for item in mytime:
+		file_object.write('%s\n' % item)
+	file_object.close()
+
 	i += 1
 
 file_object = open(txtfilename, 'w')

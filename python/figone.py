@@ -57,24 +57,37 @@ def drawPicTen(smer,pi,cool4):
 	subplot(1,1,1)
 
 	X = np.linspace(1, 50, 50,endpoint=True)
-	# C,S = np.cos(X), np.sin(X)
 
 	plot(X, smer, color="blue", linewidth=1.5, linestyle="-", label="SMER")
 	plot(X, pi, color="green", linewidth=1.5, linestyle=":", label="RaspberryPi")
 	plot(X, cool4, color="red", linewidth=1.5, linestyle="--", label="Linux Server")
 
-	# plot(X, S, color="green", linewidth=1.0, linestyle="-")
-
 	xlim(0,50.0)
-
 	xticks(np.linspace(0,50,6,endpoint=True))
 
 	ylim(-20,360)
-
 	yticks(np.linspace(-20.000,360,20,endpoint=True))
 	legend(loc='upper left')
 
-	# savefig("exercice_2.png",dpi=72)
+	show()
+
+def drawPicFifteen(smer,pi,cool4):
+	figure(figsize=(8,6), dpi=80)
+
+	subplot(1,1,1)
+
+	X = np.linspace(1, 50, 50,endpoint=True)
+
+	plot(X, smer, color="blue", linewidth=1.5, linestyle="-", label="SMER")
+	plot(X, pi, color="green", linewidth=1.5, linestyle=":", label="RaspberryPi")
+	plot(X, cool4, color="red", linewidth=1.5, linestyle="--", label="Linux Server")
+
+	xlim(0,50.0)
+	xticks(np.linspace(0,50,6,endpoint=True))
+
+	ylim(-20,650)
+	yticks(np.linspace(-40.000,760,21,endpoint=True))
+	legend(loc='upper left')
 
 	show()
 
@@ -137,8 +150,14 @@ def drawFigTwo():
 	smerdata,pidata,cool4data = readDataFromFile(10)
 	# print max(smerdata)
 	drawPicTen(smerdata,pidata,cool4data)
-drawFigone()
+
+def drawFigThree():
+	smerdata,pidata,cool4data = readDataFromFile(50)
+	smerdatafilter = myfilter(smerdata)
+	drawPicFifteen(smerdatafilter,pidata,cool4data)
+# drawFigone()
 # drawFigTwo()
+drawFigThree()
 
 
 	# print np.mean(smerdatafilter)
