@@ -446,9 +446,9 @@ getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 2):
+while (i < 75):
 	old = time.time()
-	buySingle(41)
+	buySingle(42)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
