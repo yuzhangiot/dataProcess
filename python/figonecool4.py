@@ -16,8 +16,8 @@ except ImportError:
     from urllib import urlencode
 #convert bmp to jpg
 home = "/home/joseph/"
-txtfilename = "python/data/cool4data_10.txt"
-bmpnum = 10
+txtfilename = "python/data/cool4data_50.txt"
+bmpnum = 50
 
 def processData(datapath):
 	img = Image(filename = datapath)
