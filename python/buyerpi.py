@@ -364,6 +364,8 @@ def transBranchData(num,datapath,sentDataurl):
 
 def receiveBranchData(num,dataurl,revDatapath):
 	i = 0
+	num = 10
+
 	dataurlBr = ""
 	while (i<num):
 		dataurlmid = dataurl + str(i) + ".jpg" + " "
@@ -444,7 +446,7 @@ getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 75):
+while (i < 2):
 	old = time.time()
 	buySingle(40)
 	new = time.time()
