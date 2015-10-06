@@ -18,7 +18,7 @@ except ImportError:
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 home = "/home/pi/"
-txtfilename = "python/data/singleSMERdata_100.txt"
+txtfilename = "python/data/singleSMERdata_200.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -437,7 +437,7 @@ def buySingle(sellerid):
 					proFlag = True
 
 sid=0
-bmpnum = 100
+bmpnum = 200
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -446,7 +446,7 @@ getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 30):
+while (i < 75):
 	old = time.time()
 	buySingle(43)
 	new = time.time()
