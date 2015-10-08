@@ -436,6 +436,68 @@ def buySingle(sellerid):
 				if(processCount%3 == 0):
 					proFlag = True
 
+def buyMulti(sellerid):
+	while True:
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		sid = sellerid
+		pprint.pprint("No. " + str(sid) + " has been choosen")
+		registUser(sid,"eth_sendTransaction")
+		time.sleep(5)
+		suc = registUser(sid,"eth_call")
+		if (suc == 1):
+			pprint.pprint("No. " + str(sid) + " has been successful connected!")
+			break
+		else:
+			pprint.pprint("No. " + str(sid) + " is busy, retry after 10s...")
+			continue
+
+	# transData(datapath,sentDataurl)
+	transBranchData(bmpnum,datapath,sentDataurl)
+	pprint.pprint("data transform complete!")
+	pprint.pprint("ask for processing...")
+	callforProcess(sid)
+	processCount = 0
+	proFlag = True
+	confirmFlag = False
+	fid = createNewBlockFilter()
+	while True:
+		m_filter = getFilterChanges(fid)
+		if (m_filter == []):
+			time.sleep(5)
+			pprint.pprint(getStatus(sid))
+		else:
+			m_status = getStatus(sid)
+			pprint.pprint(m_status)
+			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
+				# transData(getDataurl,getdatapath)
+				receiveBranchData(bmpnum,getDataurl,getdatapath)
+				c_result = checkData(checkDatapath)
+				if (c_result == "EXT_JPG"):
+					confirmation(sid)
+					confirmFlag = True
+					pprint.pprint(m_status)
+					pprint.pprint("data check complete")
+				else:
+					pprint.pprint(m_status)
+					pprint.pprint("data check failed,retry...")
+					callforProcess(sid)
+			elif (m_status[:len("processing...")] == "processing..."):
+				pprint.pprint("right now, a minute!")
+			elif(processCount > 3 and proFlag):
+				callforProcess(sid)
+				proFlag = False
+			elif (m_status[:len("finished")] == "finished" and (confirmFlag==True)):
+				confirmation(sid)
+			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
+				confirmFlag = False
+				break
+			else:
+				pprint.pprint("wait a minute, data is processing...")
+				processCount += 1
+				if(processCount%3 == 0):
+					proFlag = True
+
 sid=0
 bmpnum = 10
 datapath = home + "ether/test/book"
@@ -448,7 +510,7 @@ mytime = []
 i=0
 while (i < 75):
 	old = time.time()
-	buySingle(46)
+	buySingle(45)
 	new = time.time()
 	add = new - old
 	mytime.append(add)

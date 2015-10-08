@@ -16,6 +16,8 @@ except ImportError:
 
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+home = "/home/joseph/"
+txtfilename = "python/data/multiSMERearn_10.txt"
 # identiy the file type
 
 typeList = {
