@@ -497,7 +497,7 @@ def buyMulti():
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
-		time.sleep(5)
+		time.sleep(3)
 		for item in avserver:
 		# item = avserver[0]
 			myserver = item["name"]
