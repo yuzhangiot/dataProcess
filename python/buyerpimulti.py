@@ -442,7 +442,7 @@ def process_thread(servername,servernum,serverid):
 	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
-	transBranchData(1,datapath,sentDataurl)
+	transBranchData(20,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
 	sid = serverid
@@ -461,7 +461,7 @@ def process_thread(servername,servernum,serverid):
 			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				# transData(getDataurl,getdatapath)
-				receiveBranchData(1,getDataurl,getdatapath)
+				receiveBranchData(10,getDataurl,getdatapath)
 				c_result = checkData(checkDatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
@@ -494,7 +494,7 @@ def process_thread(servername,servernum,serverid):
 def buyMulti():
 	global bmpnum
 	global avserver
-	vagin_flag = True
+	vagin_flag = 0
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -507,10 +507,9 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				if (not vagin_flag):
+				if (vagin_flag == 1 or vagin_flag == 2):
 					time.sleep(40)
-				else:
-					vagin_flag = False
+				vagin_flag += 1
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
@@ -584,15 +583,11 @@ class server_class(object):
 above is single smer experiment
 below is multi smer experiment
 
-{
-	"id" : 2,
-	"name" : "ubuntu",
-	"number" : 15,
-	"status" : True}
+
 
 """
 sid=0
-bmpnum = 10
+bmpnum = 5
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -600,13 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 21,
+	"number" : 28,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 23,
+	"number" : 30,
+	"status" : True
+},
+{
+	"id" : 2,
+	"name" : "ubuntu",
+	"number" : 32,
 	"status" : True
 }
 ]
