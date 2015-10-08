@@ -442,7 +442,7 @@ def process_thread(servername,servernum,serverid):
 	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
-	transBranchData(20,datapath,sentDataurl)
+	transBranchData(10,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
 	sid = serverid
@@ -505,10 +505,10 @@ def buyMulti():
 			listid = item["id"]
 			sid = item["number"]
 			if (item["status"]):
-				pprint.pprint("No. " + str(sid) + " has been choosen")
-				registUser(sid,"eth_sendTransaction")
 				if (vagin_flag == 1 or vagin_flag == 2):
 					time.sleep(40)
+				pprint.pprint("No. " + str(sid) + " has been choosen")
+				registUser(sid,"eth_sendTransaction")
 				vagin_flag += 1
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
@@ -587,7 +587,7 @@ below is multi smer experiment
 
 """
 sid=0
-bmpnum = 5
+bmpnum = 10
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -595,19 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 32,
+	"number" : 43,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 34,
+	"number" : 46,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 36,
+	"number" : 49,
 	"status" : True
 }
 ]
