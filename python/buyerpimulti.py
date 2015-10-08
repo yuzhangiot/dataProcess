@@ -573,9 +573,9 @@ above is single smer experiment
 below is multi smer experiment
 
 """
-avserver = {"52" : "cool4",
-			"53" : "ubuntu",
-			"54" : "cool0"
+avserver = {"53" : "cool4",
+			"55" : "ubuntu",
+			"52" : "cool0"
 }
 mytime = []
 old = time.time()
