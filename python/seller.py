@@ -16,6 +16,8 @@ except ImportError:
 
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+home = "/home/joseph/"
+txtfilename = "python/data/multiSMERearn_10.txt"
 # identiy the file type
 
 typeList = {
@@ -94,6 +96,30 @@ def getSha3Data(strData):
 	m_result = de_result['result']
 	# pprint.pprint(addr)
 	return m_result
+
+def getBalance():
+	c = pycurl.Curl()
+	c.setopt(c.URL, hosturl)
+	raw_result = BytesIO()
+	my_addr = getLocalAddr()
+
+	# params = [{"from": my_addr, "to": contract_addr,"data": code_getpath}]
+
+	data = json.dumps({'jsonrpc':'2.0','method':'eth_getBalance','params':[my_addr,"latest"],'id':1})
+
+	print data
+
+	c.setopt(pycurl.POST, 1)
+	c.setopt(c.POSTFIELDS, data)
+	c.setopt(c.WRITEFUNCTION, raw_result.write)
+
+	c.perform()
+	c.close()
+
+	de_result = json.loads(raw_result.getvalue())
+	m_result = de_result['result']
+	data_change = int(m_result,16)
+	return data_change
 
 #Regist as a seller
 def registSeller(action):
@@ -307,11 +333,14 @@ def getFilterChanges(fid):
 
 registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
-sid = 0
+sid = 1000000
 bmpnum = 1
 idle_flag = True
 datapath = "/home/joseph/ether/test/book"
 m_status = "idle"
+ori_balance = getBalance()
+earn = 0
+earn_money = []
 print "registing...Please wait..."
 time.sleep(10)
 
@@ -322,8 +351,10 @@ while True:
 		time.sleep(1)
 		print getStatus(sid)
 	else:
-		sid = registSeller("eth_call")
-		sid -= 1
+		mid_sid = registSeller("eth_call")
+		mid_sid -= 1
+		if (mid_sid <= sid):
+			sid = mid_sid
 		print "I'm seller " + str(sid)
 		m_status = getStatus(sid)
 		print m_status
@@ -342,6 +373,22 @@ while True:
 			print "The data process is complete!"
 		else:
 			print "wait a minute..."
+			if (earn == 0):
+				earn = getBalance() - ori_balance
+				print "no money earned yet..."
+			else:
+				print "get money!!! Here's the money: " + str(earn)
+				earn_money.append(str(earn))
+				file_object = open(txtfilename, 'w')
+				for item in earn_money:
+					file_object.write('%s\n' % item)
+				file_object.close()
+				earn = 0
+
+
+
+
+# print getBalance()
 
 # print registSeller("eth_sendTransaction")
 # print registSeller("eth_call")

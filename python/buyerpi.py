@@ -364,7 +364,7 @@ def transBranchData(num,datapath,sentDataurl):
 
 def receiveBranchData(num,dataurl,revDatapath):
 	i = 0
-	num = 10
+	num = 1
 
 	dataurlBr = ""
 	while (i<num):
@@ -437,7 +437,7 @@ def buySingle(sellerid):
 					proFlag = True
 
 sid=0
-bmpnum = 10
+bmpnum = 1
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -446,9 +446,9 @@ getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 75):
+while (i < 3):
 	old = time.time()
-	buySingle(46)
+	buySingle(48)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
