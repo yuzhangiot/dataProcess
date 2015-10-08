@@ -438,6 +438,8 @@ def buySingle(sellerid):
 				
 
 def process_thread(servername,servernum,serverid):
+	global bmpnum
+	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
 	transBranchData(1,datapath,sentDataurl)
@@ -480,7 +482,7 @@ def process_thread(servername,servernum,serverid):
 			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
 				confirmFlag = False
 				bmpnum -= 1
-				pprint.pprint(bmpnum)
+				pprint.pprint("bmp left num is : " + str(bmpnum))
 				avserver[servernum]["status"] = True
 				break
 			else:
@@ -490,6 +492,8 @@ def process_thread(servername,servernum,serverid):
 					proFlag = True
 
 def buyMulti():
+	global bmpnum
+	global avserver
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
