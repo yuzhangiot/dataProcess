@@ -505,10 +505,10 @@ def buyMulti():
 			listid = item["id"]
 			sid = item["number"]
 			if (item["status"]):
-				pprint.pprint("No. " + str(sid) + " has been choosen")
-				registUser(sid,"eth_sendTransaction")
 				if (vagin_flag == 1 or vagin_flag == 2):
 					time.sleep(40)
+				pprint.pprint("No. " + str(sid) + " has been choosen")
+				registUser(sid,"eth_sendTransaction")
 				vagin_flag += 1
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
@@ -595,19 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 40,
+	"number" : 43,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 38,
+	"number" : 46,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 39,
+	"number" : 49,
 	"status" : True
 }
 ]
