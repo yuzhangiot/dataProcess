@@ -371,6 +371,7 @@ while True:
 			finish(sid)
 		elif(m_status[:len("finished")] == "finished"):
 			idle_flag = True
+			finish_flag = True
 			print getStatus(sid)
 			print "The data process is complete!"
 		else:
@@ -379,6 +380,7 @@ while True:
 				print "no money earned yet..."
 			else:
 				earn = getBalance() - ori_balance
+				ori_balance = earn
 				print "get money!!! Here's the money: " + str(earn)
 				earn_money.append(str(earn))
 				file_object = open(txtfilename, 'w')
@@ -386,6 +388,7 @@ while True:
 					file_object.write('%s\n' % item)
 				file_object.close()
 				earn = 0
+				finish_flag = False
 
 
 

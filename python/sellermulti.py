@@ -97,6 +97,30 @@ def getSha3Data(strData):
 	# pprint.pprint(addr)
 	return m_result
 
+def getBalance():
+	c = pycurl.Curl()
+	c.setopt(c.URL, hosturl)
+	raw_result = BytesIO()
+	my_addr = getLocalAddr()
+
+	# params = [{"from": my_addr, "to": contract_addr,"data": code_getpath}]
+
+	data = json.dumps({'jsonrpc':'2.0','method':'eth_getBalance','params':[my_addr,"latest"],'id':1})
+
+	print data
+
+	c.setopt(pycurl.POST, 1)
+	c.setopt(c.POSTFIELDS, data)
+	c.setopt(c.WRITEFUNCTION, raw_result.write)
+
+	c.perform()
+	c.close()
+
+	de_result = json.loads(raw_result.getvalue())
+	m_result = de_result['result']
+	data_change = int(m_result,16)
+	return data_change
+
 #Regist as a seller
 def registSeller(action):
 	c = pycurl.Curl()
@@ -309,11 +333,15 @@ def getFilterChanges(fid):
 
 registSeller("eth_sendTransaction")
 fid = createNewBlockFilter()
-sid = 0
+sid = 1000000
 bmpnum = 1
 idle_flag = True
+finish_flag = False
 datapath = "/home/joseph/ether/test/book"
 m_status = "idle"
+ori_balance = getBalance()
+earn = 0
+earn_money = []
 print "registing...Please wait..."
 time.sleep(10)
 
@@ -324,12 +352,15 @@ while True:
 		time.sleep(1)
 		print getStatus(sid)
 	else:
-		sid = registSeller("eth_call")
-		sid -= 1
+		mid_sid = registSeller("eth_call")
+		mid_sid -= 1
+		if (mid_sid <= sid):
+			sid = mid_sid
 		print "I'm seller " + str(sid)
 		m_status = getStatus(sid)
-		print m_status
-		print idle_flag
+		print "m_status + " + m_status
+		print "idle_flag + " + idle_flag
+		print "finish_flag" + finish_flag
 		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
 			print "start processing..."
 			# processData(datapath)
@@ -340,10 +371,29 @@ while True:
 			finish(sid)
 		elif(m_status[:len("finished")] == "finished"):
 			idle_flag = True
+			finish_flag = True
 			print getStatus(sid)
 			print "The data process is complete!"
 		else:
 			print "wait a minute..."
+			if (finish_flag == False):
+				print "no money earned yet..."
+			else:
+				earn = getBalance() - ori_balance
+				ori_balance = earn
+				print "get money!!! Here's the money: " + str(earn)
+				earn_money.append(str(earn))
+				file_object = open(txtfilename, 'w')
+				for item in earn_money:
+					file_object.write('%s\n' % item)
+				file_object.close()
+				earn = 0
+				finish_flag = False
+
+
+
+
+# print getBalance()
 
 # print registSeller("eth_sendTransaction")
 # print registSeller("eth_call")
