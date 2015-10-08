@@ -369,7 +369,7 @@ while True:
 			finish(sid)
 		elif((m_status[:len("processing...")] == "processing...") and (idle_flag == False)):
 			finish(sid)
-			time.sleep(10)
+			time.sleep(20)
 		elif(m_status[:len("finished")] == "finished"):
 			idle_flag = True
 			finish_flag = True

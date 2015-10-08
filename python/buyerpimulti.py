@@ -506,7 +506,7 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				time.sleep(5)
+				time.sleep(15)
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
