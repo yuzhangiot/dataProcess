@@ -437,12 +437,13 @@ def buySingle(sellerid):
 					proFlag = True
 				
 
-def process_thread(servername,servernum):
+def process_thread(servername,servernum,serverid):
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
 	transBranchData(1,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
+	sid = serverid
 	callforProcess(sid)
 	processCount = 0
 	proFlag = True
@@ -495,21 +496,24 @@ def buyMulti():
 		time.sleep(5)
 		for item in avserver:
 			myserver = item["name"]
+			serverid = item["number"]
 			sid = item["number"]
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-			time.sleep(5)
-			suc = registUser(sid,"eth_call")
-			if (suc == 1):
-				pprint.pprint("No. " + str(sid) + " has been successful connected!")
-				item["status"] = False
-				try:
-					thread.start_new_thread( process_thread, (myserver, item))
-				except:
-					print "Error: unable to start thread"
+				time.sleep(5)
+				suc = registUser(sid,"eth_call")
+				if (suc == 1):
+					pprint.pprint("No. " + str(sid) + " has been successful connected!")
+					item["status"] = False
+					try:
+						thread.start_new_thread( process_thread, (myserver, item, serverid,))
+					except:
+						print "Error: unable to start thread"
+				else:
+					pprint.pprint("No. " + str(sid) + " is busy, retry others server")
 			else:
-				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
+				pprint.pprint("")
 
 
 def print_time( threadName, delay):
@@ -545,7 +549,7 @@ class server_class(object):
 	def getParams(self):
 		if (self.name == "cool4"):
 			sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-			getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
+			getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"	
 			return sentDataurl,getDataurl
 		elif (self.name == "cool0"):
 			sentDataurl = "joseph@192.168.10.3:/home/joseph/ether/test/"
@@ -610,6 +614,7 @@ avserver = [{
 	"name" : "ubuntu",
 	"number" : 55,
 	"status" : True},]
+
 mytime = []
 old = time.time()
 buyMulti()
