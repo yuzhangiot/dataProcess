@@ -498,27 +498,27 @@ def buyMulti():
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
 		time.sleep(5)
-		# for item in avserver:
-		item = avserver[0]
-		myserver = item["name"]
-		listid = item["id"]
-		sid = item["number"]
-		if (item["status"]):
-			pprint.pprint("No. " + str(sid) + " has been choosen")
-			registUser(sid,"eth_sendTransaction")
-			time.sleep(5)
-			suc = registUser(sid,"eth_call")
-			if (suc == 1):
-				pprint.pprint("No. " + str(sid) + " has been successful connected!")
-				item["status"] = False
-				try:
-					thread.start_new_thread( process_thread, (myserver, listid, sid,))
-				except:
-					print "Error: unable to start thread"
+		for item in avserver:
+		# item = avserver[0]
+			myserver = item["name"]
+			listid = item["id"]
+			sid = item["number"]
+			if (item["status"]):
+				pprint.pprint("No. " + str(sid) + " has been choosen")
+				registUser(sid,"eth_sendTransaction")
+				time.sleep(5)
+				suc = registUser(sid,"eth_call")
+				if (suc == 1):
+					pprint.pprint("No. " + str(sid) + " has been successful connected!")
+					item["status"] = False
+					try:
+						thread.start_new_thread( process_thread, (myserver, listid, sid,))
+					except:
+						print "Error: unable to start thread"
+				else:
+					pprint.pprint("No. " + str(sid) + " is busy, retry others server")
 			else:
-				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
-		else:
-			pprint.pprint("server is busy,please wait...")
+				pprint.pprint("server is busy,please wait...")
 
 
 def print_time( threadName, delay):
