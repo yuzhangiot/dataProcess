@@ -501,7 +501,6 @@ def buyMulti():
 		# for item in avserver:
 		item = avserver[0]
 		myserver = item["name"]
-		serverid = item["number"]
 		listid = item["id"]
 		sid = item["number"]
 		if (item["status"]):
@@ -513,7 +512,7 @@ def buyMulti():
 				pprint.pprint("No. " + str(sid) + " has been successful connected!")
 				item["status"] = False
 				try:
-					thread.start_new_thread( process_thread, (myserver, listid, serverid,))
+					thread.start_new_thread( process_thread, (myserver, listid, sid,))
 				except:
 					print "Error: unable to start thread"
 			else:
@@ -597,13 +596,13 @@ avserver = [{
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 4,
+	"number" : 10,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 7,
+	"number" : 11,
 	"status" : True},]
 
 mytime = []
