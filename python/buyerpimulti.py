@@ -494,7 +494,7 @@ def process_thread(servername,servernum,serverid):
 def buyMulti():
 	global bmpnum
 	global avserver
-	vagin_flag = True
+	vagin_flag = 0
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -507,10 +507,9 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				if (not vagin_flag):
+				if (vagin_flag == 1 or vagin_flag == 2):
 					time.sleep(40)
-				else:
-					vagin_flag = False
+				vagin_flag += 1
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
@@ -596,19 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 24,
+	"number" : 28,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 25,
+	"number" : 30,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 27,
+	"number" : 32,
 	"status" : True
 }
 ]
