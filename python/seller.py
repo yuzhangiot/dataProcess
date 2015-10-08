@@ -336,6 +336,7 @@ fid = createNewBlockFilter()
 sid = 1000000
 bmpnum = 1
 idle_flag = True
+finish_flag = False
 datapath = "/home/joseph/ether/test/book"
 m_status = "idle"
 ori_balance = getBalance()
@@ -357,8 +358,9 @@ while True:
 			sid = mid_sid
 		print "I'm seller " + str(sid)
 		m_status = getStatus(sid)
-		print m_status
-		print idle_flag
+		print "m_status + " + m_status
+		print "idle_flag + " + idle_flag
+		print "finish_flag" + finish_flag
 		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
 			print "start processing..."
 			# processData(datapath)
@@ -373,10 +375,10 @@ while True:
 			print "The data process is complete!"
 		else:
 			print "wait a minute..."
-			if (earn == 0):
-				earn = getBalance() - ori_balance
+			if (finish_flag == False):
 				print "no money earned yet..."
 			else:
+				earn = getBalance() - ori_balance
 				print "get money!!! Here's the money: " + str(earn)
 				earn_money.append(str(earn))
 				file_object = open(txtfilename, 'w')
