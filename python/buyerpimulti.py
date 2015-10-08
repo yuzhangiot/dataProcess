@@ -489,8 +489,7 @@ def process_thread(servername,servernum,serverid):
 				if(processCount%3 == 0):
 					proFlag = True
 
-def buyMulti(num):
-	bmpnum = num
+def buyMulti():
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -552,11 +551,7 @@ class server_class(object):
 		else:
 			pprint.pprint("there is no server called: " + self.name)
 
-sid=0
-bmpnum = 10
-datapath = home + "ether/test/book"
-getdatapath = home + "ether/test/"
-checkDatapath = home + "ether/test/book0.jpg"
+
 
 # mytime = []
 # i=0
@@ -583,6 +578,12 @@ above is single smer experiment
 below is multi smer experiment
 
 """
+sid=0
+bmpnum = 10
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
+
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
@@ -603,7 +604,7 @@ avserver = [{
 
 mytime = []
 old = time.time()
-buyMulti(bmpnum)
+buyMulti()
 new = time.time()
 add = new - old
 mytime.append(add)
