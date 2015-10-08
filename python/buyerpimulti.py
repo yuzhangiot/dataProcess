@@ -506,7 +506,7 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				time.sleep(5)
+				time.sleep(15)
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
@@ -590,19 +590,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 9,
+	"number" : 13,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 10,
+	"number" : 12,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 11,
+	"number" : 15,
 	"status" : True},]
 
 mytime = []
