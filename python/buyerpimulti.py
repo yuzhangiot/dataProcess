@@ -612,7 +612,7 @@ avserver = [{
 	"status" : True},]
 mytime = []
 old = time.time()
-buyMulti(avserver)
+buyMulti()
 new = time.time()
 add = new - old
 mytime.append(add)
