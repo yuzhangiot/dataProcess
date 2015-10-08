@@ -17,7 +17,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+contract_addr = '0xf651d8a5600ea078308fe02301e9cda09ba781be'
 home = "/home/pi/"
 txtfilename = "python/data/multiSMERdata_10.txt"
 
@@ -435,34 +435,15 @@ def buySingle(sellerid):
 				processCount += 1
 				if(processCount%3 == 0):
 					proFlag = True
-
-def buyMulti(avserver):
-	while (bmpnum > 0):
-		# seller_num = getSeller()
-		# sid = randint(0,seller_num-1)
-		time.sleep(3)
-		for item in avserver:
-			sid = int(item)
-			pprint.pprint("No. " + str(sid) + " has been choosen")
-			registUser(sid,"eth_sendTransaction")
-			time.sleep(5)
-			suc = registUser(sid,"eth_call")
-			if (suc == 1):
-				myserver = server_class(avserver[item])
-				pprint.pprint("No. " + str(sid) + " has been successful connected!")
-				try:
-					thread.start_new_thread( process_thread, ( myserver ) )
-				except:
-					print "Error: unable to start thread"
-			else:
-				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
 				
 
-def process_thread(serverins):
+def process_thread(servername,servernum,serverid):
+	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
 	transBranchData(1,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
+	sid = serverid
 	callforProcess(sid)
 	processCount = 0
 	proFlag = True
@@ -500,12 +481,41 @@ def process_thread(serverins):
 				confirmFlag = False
 				bmpnum -= 1
 				pprint.pprint(bmpnum)
+				avserver[servernum]["status"] = True
 				break
 			else:
 				pprint.pprint("wait a minute, data is processing...")
 				processCount += 1
 				if(processCount%3 == 0):
 					proFlag = True
+
+def buyMulti(num):
+	bmpnum = num
+	while (bmpnum > 0):
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		time.sleep(5)
+		for item in avserver:
+			myserver = item["name"]
+			serverid = item["number"]
+			sid = item["number"]
+			if (item["status"]):
+				pprint.pprint("No. " + str(sid) + " has been choosen")
+				registUser(sid,"eth_sendTransaction")
+				time.sleep(5)
+				suc = registUser(sid,"eth_call")
+				if (suc == 1):
+					pprint.pprint("No. " + str(sid) + " has been successful connected!")
+					item["status"] = False
+					try:
+						thread.start_new_thread( process_thread, (myserver, item, serverid,))
+					except:
+						print "Error: unable to start thread"
+				else:
+					pprint.pprint("No. " + str(sid) + " is busy, retry others server")
+			else:
+				pprint.pprint("server is busy,please wait...")
+
 
 def print_time( threadName, delay):
    count = 0
@@ -515,25 +525,19 @@ def print_time( threadName, delay):
       print "%s: %s" % ( threadName, time.ctime(time.time()) )
 
 
-
-
-
-sid=0
-bmpnum = 10
-datapath = home + "ether/test/book"
-getdatapath = home + "ether/test/"
-checkDatapath = home + "ether/test/book0.jpg"
-
-
 class server_class(object):
 	"""docstring for server_class"""
+	cool4 = "idle"
+	cool0 = "idle"
+	ubuntu = "idle"
 	def __init__(self, name):
 		super(server_class, self).__init__()
 		self.name = name
+
 	def getParams(self):
 		if (self.name == "cool4"):
 			sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-			getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
+			getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"	
 			return sentDataurl,getDataurl
 		elif (self.name == "cool0"):
 			sentDataurl = "joseph@192.168.10.3:/home/joseph/ether/test/"
@@ -546,7 +550,14 @@ class server_class(object):
 		else:
 			pprint.pprint("there is no server called: " + self.name)
 
-
+sid=0
+bmpnum = 10
+cool4_flag = True
+cool0_flag = True
+ubuntu_flag = True
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
 
 # mytime = []
 # i=0
@@ -573,21 +584,32 @@ above is single smer experiment
 below is multi smer experiment
 
 """
-avserver = {"52" : "cool4",
-			"53" : "ubuntu",
-			"54" : "cool0"
-}
+avserver = [{
+	"name" : "cool0",
+	"number" : 52,
+	"status" : True
+},
+{
+	"name" : "cool4",
+	"number" : 53,
+	"status" : True
+},
+{
+	"name" : "ubuntu",
+	"number" : 55,
+	"status" : True},]
+
 mytime = []
 old = time.time()
-buyMulti(avserver)
+buyMulti(bmpnum)
 new = time.time()
 add = new - old
 mytime.append(add)
 
 file_object = open(txtfilename, 'w')
-	for item in mytime:
-		file_object.write('%s\n' % item)
-	file_object.close()
+for item in mytime:
+	file_object.write('%s\n' % item)
+file_object.close()
 
 
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
