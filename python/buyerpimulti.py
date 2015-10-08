@@ -438,6 +438,8 @@ def buySingle(sellerid):
 				
 
 def process_thread(servername,servernum,serverid):
+	global bmpnum
+	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
 	transBranchData(1,datapath,sentDataurl)
@@ -480,7 +482,7 @@ def process_thread(servername,servernum,serverid):
 			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
 				confirmFlag = False
 				bmpnum -= 1
-				pprint.pprint(bmpnum)
+				pprint.pprint("bmp left num is : " + str(bmpnum))
 				avserver[servernum]["status"] = True
 				break
 			else:
@@ -489,15 +491,17 @@ def process_thread(servername,servernum,serverid):
 				if(processCount%3 == 0):
 					proFlag = True
 
-def buyMulti(num):
-	bmpnum = num
+def buyMulti():
+	global bmpnum
+	global avserver
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
-		time.sleep(5)
+		time.sleep(3)
 		for item in avserver:
+		# item = avserver[0]
 			myserver = item["name"]
-			serverid = item["number"]
+			listid = item["id"]
 			sid = item["number"]
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
@@ -508,7 +512,7 @@ def buyMulti(num):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
 					item["status"] = False
 					try:
-						thread.start_new_thread( process_thread, (myserver, item, serverid,))
+						thread.start_new_thread( process_thread, (myserver, listid, sid,))
 					except:
 						print "Error: unable to start thread"
 				else:
@@ -550,14 +554,7 @@ class server_class(object):
 		else:
 			pprint.pprint("there is no server called: " + self.name)
 
-sid=0
-bmpnum = 10
-cool4_flag = True
-cool0_flag = True
-ubuntu_flag = True
-datapath = home + "ether/test/book"
-getdatapath = home + "ether/test/"
-checkDatapath = home + "ether/test/book0.jpg"
+
 
 # mytime = []
 # i=0
@@ -584,24 +581,33 @@ above is single smer experiment
 below is multi smer experiment
 
 """
+sid=0
+bmpnum = 10
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
+
 avserver = [{
+	"id" : 0,
 	"name" : "cool0",
-	"number" : 52,
+	"number" : 9,
 	"status" : True
 },
 {
+	"id" : 1,
 	"name" : "cool4",
-	"number" : 53,
+	"number" : 10,
 	"status" : True
 },
 {
+	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 55,
+	"number" : 11,
 	"status" : True},]
 
 mytime = []
 old = time.time()
-buyMulti(bmpnum)
+buyMulti()
 new = time.time()
 add = new - old
 mytime.append(add)
