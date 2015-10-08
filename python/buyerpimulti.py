@@ -283,7 +283,7 @@ def confirmation(id):
 	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath_full}]
 
 
-	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction",'params':params,'id':1})
+	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction","value":1000000000,'params':params,'id':1})
 	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
@@ -595,19 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 28,
+	"number" : 32,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 30,
+	"number" : 34,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 32,
+	"number" : 36,
 	"status" : True
 }
 ]
