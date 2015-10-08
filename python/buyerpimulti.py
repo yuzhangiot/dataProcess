@@ -595,19 +595,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 28,
+	"number" : 32,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 30,
+	"number" : 34,
 	"status" : True
 },
 {
 	"id" : 2,
 	"name" : "ubuntu",
-	"number" : 32,
+	"number" : 36,
 	"status" : True
 }
 ]
