@@ -498,6 +498,7 @@ def buyMulti(num):
 		for item in avserver:
 			myserver = item["name"]
 			serverid = item["number"]
+			listid = item["id"]
 			sid = item["number"]
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
@@ -508,7 +509,7 @@ def buyMulti(num):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
 					item["status"] = False
 					try:
-						thread.start_new_thread( process_thread, (myserver, item, serverid,))
+						thread.start_new_thread( process_thread, (myserver, listid, serverid,))
 					except:
 						print "Error: unable to start thread"
 				else:
@@ -585,16 +586,19 @@ below is multi smer experiment
 
 """
 avserver = [{
+	"id" : "0",
 	"name" : "cool0",
 	"number" : 1,
 	"status" : True
 },
 {
+	"id" : "1",
 	"name" : "cool4",
 	"number" : 2,
 	"status" : True
 },
 {
+	"id" : "2",
 	"name" : "ubuntu",
 	"number" : 3,
 	"status" : True},]
