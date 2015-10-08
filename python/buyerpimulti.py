@@ -586,7 +586,7 @@ below is multi smer experiment
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 8,
+	"number" : 9,
 	"status" : True
 },
 {
