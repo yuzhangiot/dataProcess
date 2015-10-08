@@ -494,6 +494,7 @@ def process_thread(servername,servernum,serverid):
 def buyMulti():
 	global bmpnum
 	global avserver
+	vagin_flag = True
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -506,7 +507,10 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				time.sleep(35)
+				if (not vagin_flag):
+					time.sleep(40)
+				else:
+					vagin_flag = False
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
