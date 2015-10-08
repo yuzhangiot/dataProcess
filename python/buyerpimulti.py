@@ -442,7 +442,7 @@ def process_thread(servername,servernum,serverid):
 	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
-	transBranchData(1,datapath,sentDataurl)
+	transBranchData(20,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
 	sid = serverid
@@ -461,7 +461,7 @@ def process_thread(servername,servernum,serverid):
 			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				# transData(getDataurl,getdatapath)
-				receiveBranchData(1,getDataurl,getdatapath)
+				receiveBranchData(10,getDataurl,getdatapath)
 				c_result = checkData(checkDatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
@@ -587,7 +587,7 @@ below is multi smer experiment
 
 """
 sid=0
-bmpnum = 10
+bmpnum = 5
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
