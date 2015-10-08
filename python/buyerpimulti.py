@@ -17,7 +17,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+contract_addr = '0xf651d8a5600ea078308fe02301e9cda09ba781be'
 home = "/home/pi/"
 txtfilename = "python/data/multiSMERdata_10.txt"
 
@@ -489,7 +489,8 @@ def process_thread(servername,servernum,serverid):
 				if(processCount%3 == 0):
 					proFlag = True
 
-def buyMulti():
+def buyMulti(num):
+	bmpnum = num
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -513,7 +514,7 @@ def buyMulti():
 				else:
 					pprint.pprint("No. " + str(sid) + " is busy, retry others server")
 			else:
-				pprint.pprint("")
+				pprint.pprint("server is busy,please wait...")
 
 
 def print_time( threadName, delay):
@@ -522,19 +523,6 @@ def print_time( threadName, delay):
       time.sleep(delay)
       count += 1
       print "%s: %s" % ( threadName, time.ctime(time.time()) )
-
-
-
-
-
-sid=0
-bmpnum = 10
-cool4_flag = True
-cool0_flag = True
-ubuntu_flag = True
-datapath = home + "ether/test/book"
-getdatapath = home + "ether/test/"
-checkDatapath = home + "ether/test/book0.jpg"
 
 
 class server_class(object):
@@ -562,18 +550,14 @@ class server_class(object):
 		else:
 			pprint.pprint("there is no server called: " + self.name)
 
-		# def setStatus(self,servername,status):
-		# 	if (servername == "cool4"):
-		# 		cool4 = status
-		# 	elif(servername == "cool0"):
-		# 		cool0 = status
-		# 	elif(servername == "ubuntu"):
-		# 		ubuntu = status
-		# 	else:
-		# 		pprint.pprint("no such device...")
-
-
-
+sid=0
+bmpnum = 10
+cool4_flag = True
+cool0_flag = True
+ubuntu_flag = True
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
 
 # mytime = []
 # i=0
@@ -617,7 +601,7 @@ avserver = [{
 
 mytime = []
 old = time.time()
-buyMulti()
+buyMulti(bmpnum)
 new = time.time()
 add = new - old
 mytime.append(add)

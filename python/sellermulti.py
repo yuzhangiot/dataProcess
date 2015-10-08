@@ -15,7 +15,7 @@ except ImportError:
     from urllib import urlencode
 
 hosturl = 'http://localhost:8101'
-contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
+contract_addr = '0xf651d8a5600ea078308fe02301e9cda09ba781be'
 home = "/home/joseph/"
 txtfilename = "python/data/multiSMERearn_10.txt"
 # identiy the file type
@@ -358,9 +358,9 @@ while True:
 			sid = mid_sid
 		print "I'm seller " + str(sid)
 		m_status = getStatus(sid)
-		print "m_status + " + str(m_status)
-		print "idle_flag + " + str(idle_flag)
-		print "finish_flag" + str(finish_flag)
+		print "m_status : " + str(m_status)
+		print "idle_flag : " + str(idle_flag)
+		print "finish_flag : " + str(finish_flag)
 		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
 			print "start processing..."
 			# processData(datapath)

@@ -39,15 +39,11 @@ contract DataProcess {
   }
   function finish(int256 id){
     Trans tr = transes[id];
-    if(msg.sender == tr.seller){
-        tr.status = "finished";
-    }
+    tr.status = "finished";
   }
   function confirm(int256 id){
     Trans tr = transes[id];
-    if(msg.sender == tr.user){
-        tr.seller.send(tr.amount);
-        tr.status = "idle";
-    }
+    tr.seller.send(tr.amount);
+    tr.status = "idle";
   }
 }
