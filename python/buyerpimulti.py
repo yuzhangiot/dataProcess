@@ -580,6 +580,12 @@ class server_class(object):
 above is single smer experiment
 below is multi smer experiment
 
+{
+	"id" : 2,
+	"name" : "ubuntu",
+	"number" : 15,
+	"status" : True}
+
 """
 sid=0
 bmpnum = 10
@@ -590,20 +596,16 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 13,
+	"number" : 16,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 12,
+	"number" : 18,
 	"status" : True
-},
-{
-	"id" : 2,
-	"name" : "ubuntu",
-	"number" : 15,
-	"status" : True},]
+}
+]
 
 mytime = []
 old = time.time()
