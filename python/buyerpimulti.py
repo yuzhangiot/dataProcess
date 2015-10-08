@@ -494,7 +494,7 @@ def buyMulti():
 		# sid = randint(0,seller_num-1)
 		time.sleep(5)
 		for item in avserver:
-			myserver = avserver[item]["name"])
+			myserver = avserver[item]["name"]
 			sid = avserver[item]["number"]
 			if (avserver[item]["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
