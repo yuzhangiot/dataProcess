@@ -494,6 +494,7 @@ def process_thread(servername,servernum,serverid):
 def buyMulti():
 	global bmpnum
 	global avserver
+	vagin_flag = True
 	while (bmpnum > 0):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
@@ -506,7 +507,10 @@ def buyMulti():
 			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
-				time.sleep(15)
+				if (not vagin_flag):
+					time.sleep(40)
+				else:
+					vagin_flag = False
 				suc = registUser(sid,"eth_call")
 				if (suc == 1):
 					pprint.pprint("No. " + str(sid) + " has been successful connected!")
@@ -580,6 +584,12 @@ class server_class(object):
 above is single smer experiment
 below is multi smer experiment
 
+{
+	"id" : 2,
+	"name" : "ubuntu",
+	"number" : 15,
+	"status" : True}
+
 """
 sid=0
 bmpnum = 10
@@ -590,20 +600,16 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 13,
+	"number" : 21,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 12,
+	"number" : 23,
 	"status" : True
-},
-{
-	"id" : 2,
-	"name" : "ubuntu",
-	"number" : 15,
-	"status" : True},]
+}
+]
 
 mytime = []
 old = time.time()
