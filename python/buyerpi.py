@@ -218,8 +218,7 @@ def callforProcess(id):
 	#first, get coinbase address
 
 	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
-	params = [{"from": my_addr, "to": contract_addr,"value":30000000,"data": code_getpath_full}]
-
+	params = [{"from": my_addr, "to": contract_addr,"value":10000000000000000,"data": code_getpath_full}]
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
 	pprint.pprint(data)
