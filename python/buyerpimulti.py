@@ -584,11 +584,7 @@ class server_class(object):
 above is single smer experiment
 below is multi smer experiment
 
-{
-	"id" : 2,
-	"name" : "ubuntu",
-	"number" : 15,
-	"status" : True}
+
 
 """
 sid=0
@@ -600,13 +596,19 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 21,
+	"number" : 24,
 	"status" : True
 },
 {
 	"id" : 1,
 	"name" : "cool4",
-	"number" : 23,
+	"number" : 25,
+	"status" : True
+},
+{
+	"id" : 2,
+	"name" : "ubuntu",
+	"number" : 27,
 	"status" : True
 }
 ]
