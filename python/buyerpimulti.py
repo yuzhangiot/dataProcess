@@ -495,7 +495,8 @@ def buyMulti(num):
 		# seller_num = getSeller()
 		# sid = randint(0,seller_num-1)
 		time.sleep(5)
-		for item in avserver:
+		# for item in avserver:
+			item = avserver[0]
 			myserver = item["name"]
 			serverid = item["number"]
 			listid = item["id"]
@@ -553,9 +554,6 @@ class server_class(object):
 
 sid=0
 bmpnum = 10
-cool4_flag = True
-cool0_flag = True
-ubuntu_flag = True
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -586,19 +584,19 @@ below is multi smer experiment
 
 """
 avserver = [{
-	"id" : "0",
+	"id" : 0,
 	"name" : "cool0",
-	"number" : 5,
+	"number" : 8,
 	"status" : True
 },
 {
-	"id" : "1",
+	"id" : 1,
 	"name" : "cool4",
 	"number" : 4,
 	"status" : True
 },
 {
-	"id" : "2",
+	"id" : 2,
 	"name" : "ubuntu",
 	"number" : 7,
 	"status" : True},]
