@@ -5,6 +5,7 @@ import subprocess
 import time
 import struct
 import os
+import thread
 from io import BytesIO
 from random import randint
 import pprint
@@ -435,39 +436,158 @@ def buySingle(sellerid):
 				if(processCount%3 == 0):
 					proFlag = True
 
+def buyMulti(avserver):
+	while (bmpnum > 0):
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		time.sleep(3)
+		for item in avserver:
+			sid = int(item)
+			pprint.pprint("No. " + str(sid) + " has been choosen")
+			registUser(sid,"eth_sendTransaction")
+			time.sleep(5)
+			suc = registUser(sid,"eth_call")
+			if (suc == 1):
+				myserver = server_class(avserver[item])
+				pprint.pprint("No. " + str(sid) + " has been successful connected!")
+				try:
+					thread.start_new_thread( process_thread, ( myserver ) )
+				except:
+					print "Error: unable to start thread"
+			else:
+				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
+				
+
+def process_thread(serverins):
+	sentDataurl,getDataurl = serverins.getParams()
+	transBranchData(1,datapath,sentDataurl)
+	pprint.pprint("data transform complete!")
+	pprint.pprint("ask for processing...")
+	callforProcess(sid)
+	processCount = 0
+	proFlag = True
+	confirmFlag = False
+	fid = createNewBlockFilter()
+	while True:
+		m_filter = getFilterChanges(fid)
+		if (m_filter == []):
+			time.sleep(5)
+			pprint.pprint(getStatus(sid))
+		else:
+			m_status = getStatus(sid)
+			pprint.pprint(m_status)
+			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
+				# transData(getDataurl,getdatapath)
+				receiveBranchData(1,getDataurl,getdatapath)
+				c_result = checkData(checkDatapath)
+				if (c_result == "EXT_JPG"):
+					confirmation(sid)
+					confirmFlag = True
+					pprint.pprint(m_status)
+					pprint.pprint("data check complete")
+				else:
+					pprint.pprint(m_status)
+					pprint.pprint("data check failed,retry...")
+					callforProcess(sid)
+			elif (m_status[:len("processing...")] == "processing..."):
+				pprint.pprint("right now, a minute!")
+			elif(processCount > 3 and proFlag):
+				callforProcess(sid)
+				proFlag = False
+			elif (m_status[:len("finished")] == "finished" and (confirmFlag==True)):
+				confirmation(sid)
+			elif (m_status[:len("idle")] == "idle" and (confirmFlag==True)):
+				confirmFlag = False
+				bmpnum -= 1
+				pprint.pprint(bmpnum)
+				break
+			else:
+				pprint.pprint("wait a minute, data is processing...")
+				processCount += 1
+				if(processCount%3 == 0):
+					proFlag = True
+
+def print_time( threadName, delay):
+   count = 0
+   while count < 5:
+      time.sleep(delay)
+      count += 1
+      print "%s: %s" % ( threadName, time.ctime(time.time()) )
+
+
+
+
+
 sid=0
-bmpnum = 1
+bmpnum = 10
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
-sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
+
+class server_class(object):
+	"""docstring for server_class"""
+	def __init__(self, name):
+		super(server_class, self).__init__()
+		self.name = name
+	def getParams(self):
+		if (self.name == "cool4"):
+			sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
+			getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
+			return sentDataurl,getDataurl
+		elif (self.name == "cool0"):
+			sentDataurl = "joseph@192.168.10.3:/home/joseph/ether/test/"
+			getDataurl = "joseph@192.168.10.3:/home/joseph/ether/test/book"
+			return sentDataurl,getDataurl
+		elif (self.name == "ubuntu"):
+			sentDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/"
+			getDataurl = "joseph@192.168.10.88:/home/joseph/ether/test/book"
+			return sentDataurl,getDataurl
+		else:
+			pprint.pprint("there is no server called: " + self.name)
+
+
+
+# mytime = []
+# i=0
+# while (i < 2):
+# 	old = time.time()
+# 	buySingle(51)
+# 	new = time.time()
+# 	add = new - old
+# 	mytime.append(add)
+
+# 	file_object = open(txtfilename, 'w')
+# 	for item in mytime:
+# 		file_object.write('%s\n' % item)
+# 	file_object.close()
+
+# 	i += 1
+
+# file_object = open(txtfilename, 'w')
+# for item in mytime:
+# 	file_object.write('%s\n' % item)
+# file_object.close()
+"""
+above is single smer experiment
+below is multi smer experiment
+
+"""
+avserver = {"52" : "cool4",
+			"53" : "ubuntu",
+			"54" : "cool0"
+}
 mytime = []
-i=0
-while (i < 2):
-	old = time.time()
-	buySingle(51)
-	new = time.time()
-	add = new - old
-	mytime.append(add)
+old = time.time()
+buyMulti(avserver)
+new = time.time()
+add = new - old
+mytime.append(add)
 
-	file_object = open(txtfilename, 'w')
+file_object = open(txtfilename, 'w')
 	for item in mytime:
 		file_object.write('%s\n' % item)
 	file_object.close()
-
-	i += 1
-
-file_object = open(txtfilename, 'w')
-for item in mytime:
-	file_object.write('%s\n' % item)
-file_object.close()
-
-# getVersion()
-
-
-
 
 
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
