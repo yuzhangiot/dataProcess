@@ -494,16 +494,16 @@ def buyMulti():
 		# sid = randint(0,seller_num-1)
 		time.sleep(5)
 		for item in avserver:
-			myserver = avserver[item]["name"]
-			sid = avserver[item]["number"]
-			if (avserver[item]["status"]):
+			myserver = item["name"]
+			sid = item["number"]
+			if (item["status"]):
 				pprint.pprint("No. " + str(sid) + " has been choosen")
 				registUser(sid,"eth_sendTransaction")
 			time.sleep(5)
 			suc = registUser(sid,"eth_call")
 			if (suc == 1):
 				pprint.pprint("No. " + str(sid) + " has been successful connected!")
-				avserver[item]["status"] = False
+				item["status"] = False
 				try:
 					thread.start_new_thread( process_thread, (myserver, item))
 				except:
