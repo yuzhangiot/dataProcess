@@ -283,7 +283,7 @@ def confirmation(id):
 	params = [{"from": my_addr, "to": contract_addr,"data": code_getpath_full}]
 
 
-	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction",'params':params,'id':1})
+	data = json.dumps({'jsonrpc':'2.0','method':"eth_sendTransaction","value":1000000000,'params':params,'id':1})
 	pprint.pprint(data)
 	c.setopt(pycurl.POST, 1)
 	c.setopt(c.POSTFIELDS, data)
