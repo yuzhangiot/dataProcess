@@ -585,9 +585,9 @@ add = new - old
 mytime.append(add)
 
 file_object = open(txtfilename, 'w')
-	for item in mytime:
-		file_object.write('%s\n' % item)
-	file_object.close()
+for item in mytime:
+	file_object.write('%s\n' % item)
+file_object.close()
 
 
 # datapath = "/Users/joseph_zhang/ether/sketch/dataProcess/test.jpg"
