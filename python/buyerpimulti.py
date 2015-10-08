@@ -586,17 +586,17 @@ below is multi smer experiment
 """
 avserver = [{
 	"name" : "cool0",
-	"number" : 52,
+	"number" : 1,
 	"status" : True
 },
 {
 	"name" : "cool4",
-	"number" : 53,
+	"number" : 2,
 	"status" : True
 },
 {
 	"name" : "ubuntu",
-	"number" : 55,
+	"number" : 3,
 	"status" : True},]
 
 mytime = []
