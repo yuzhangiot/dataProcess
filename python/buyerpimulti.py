@@ -442,7 +442,7 @@ def process_thread(servername,servernum,serverid):
 	global avserver
 	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
-	transBranchData(20,datapath,sentDataurl)
+	transBranchData(10,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
 	pprint.pprint("ask for processing...")
 	sid = serverid
@@ -587,7 +587,7 @@ below is multi smer experiment
 
 """
 sid=0
-bmpnum = 5
+bmpnum = 10
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -595,7 +595,7 @@ checkDatapath = home + "ether/test/book0.jpg"
 avserver = [{
 	"id" : 0,
 	"name" : "cool0",
-	"number" : 37,
+	"number" : 40,
 	"status" : True
 },
 {
