@@ -435,30 +435,10 @@ def buySingle(sellerid):
 				processCount += 1
 				if(processCount%3 == 0):
 					proFlag = True
-
-def buyMulti(avserver):
-	while (bmpnum > 0):
-		# seller_num = getSeller()
-		# sid = randint(0,seller_num-1)
-		time.sleep(3)
-		for item in avserver:
-			sid = int(item)
-			pprint.pprint("No. " + str(sid) + " has been choosen")
-			registUser(sid,"eth_sendTransaction")
-			time.sleep(5)
-			suc = registUser(sid,"eth_call")
-			if (suc == 1):
-				myserver = server_class(avserver[item])
-				pprint.pprint("No. " + str(sid) + " has been successful connected!")
-				try:
-					thread.start_new_thread( process_thread, ( myserver ) )
-				except:
-					print "Error: unable to start thread"
-			else:
-				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
 				
 
-def process_thread(serverins):
+def process_thread(servername,servernum):
+	serverins = server_class(servername)
 	sentDataurl,getDataurl = serverins.getParams()
 	transBranchData(1,datapath,sentDataurl)
 	pprint.pprint("data transform complete!")
@@ -500,12 +480,37 @@ def process_thread(serverins):
 				confirmFlag = False
 				bmpnum -= 1
 				pprint.pprint(bmpnum)
+				avserver[servernum]["status"] = True
 				break
 			else:
 				pprint.pprint("wait a minute, data is processing...")
 				processCount += 1
 				if(processCount%3 == 0):
 					proFlag = True
+
+def buyMulti():
+	while (bmpnum > 0):
+		# seller_num = getSeller()
+		# sid = randint(0,seller_num-1)
+		time.sleep(5)
+		for item in avserver:
+			myserver = avserver[item]["name"])
+			sid = avserver[item]["number"]
+			if (avserver[item]["status"]):
+				pprint.pprint("No. " + str(sid) + " has been choosen")
+				registUser(sid,"eth_sendTransaction")
+			time.sleep(5)
+			suc = registUser(sid,"eth_call")
+			if (suc == 1):
+				pprint.pprint("No. " + str(sid) + " has been successful connected!")
+				avserver[item]["status"] = False
+				try:
+					thread.start_new_thread( process_thread, (myserver, item))
+				except:
+					print "Error: unable to start thread"
+			else:
+				pprint.pprint("No. " + str(sid) + " is busy, retry others server")
+
 
 def print_time( threadName, delay):
    count = 0
@@ -520,6 +525,9 @@ def print_time( threadName, delay):
 
 sid=0
 bmpnum = 10
+cool4_flag = True
+cool0_flag = True
+ubuntu_flag = True
 datapath = home + "ether/test/book"
 getdatapath = home + "ether/test/"
 checkDatapath = home + "ether/test/book0.jpg"
@@ -527,9 +535,13 @@ checkDatapath = home + "ether/test/book0.jpg"
 
 class server_class(object):
 	"""docstring for server_class"""
+	cool4 = "idle"
+	cool0 = "idle"
+	ubuntu = "idle"
 	def __init__(self, name):
 		super(server_class, self).__init__()
 		self.name = name
+
 	def getParams(self):
 		if (self.name == "cool4"):
 			sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
@@ -545,6 +557,17 @@ class server_class(object):
 			return sentDataurl,getDataurl
 		else:
 			pprint.pprint("there is no server called: " + self.name)
+
+		# def setStatus(self,servername,status):
+		# 	if (servername == "cool4"):
+		# 		cool4 = status
+		# 	elif(servername == "cool0"):
+		# 		cool0 = status
+		# 	elif(servername == "ubuntu"):
+		# 		ubuntu = status
+		# 	else:
+		# 		pprint.pprint("no such device...")
+
 
 
 
@@ -573,10 +596,20 @@ above is single smer experiment
 below is multi smer experiment
 
 """
-avserver = {"53" : "cool4",
-			"55" : "ubuntu",
-			"52" : "cool0"
-}
+avserver = [{
+	"name" : "cool0",
+	"number" : 52,
+	"status" : True
+},
+{
+	"name" : "cool4",
+	"number" : 53,
+	"status" : True
+},
+{
+	"name" : "ubuntu",
+	"number" : 55,
+	"status" : True},]
 mytime = []
 old = time.time()
 buyMulti(avserver)
