@@ -4,6 +4,7 @@ import binascii
 import subprocess
 import struct
 import time
+import os
 from io import BytesIO
 import pprint
 from wand.image import Image
@@ -324,9 +325,9 @@ def getString():
 	c.close()
 	return datapath
 
-
-
-print getString()
+pp = "pwd"
+print os.system(pp)
+# print getString()
 # print registSeller("eth_sendTransaction")
 # print registSeller("eth_call")
 # print getStatus(0)

@@ -358,9 +358,9 @@ while True:
 			sid = mid_sid
 		print "I'm seller " + str(sid)
 		m_status = getStatus(sid)
-		print "m_status + " + m_status
-		print "idle_flag + " + idle_flag
-		print "finish_flag" + finish_flag
+		print "m_status + " + str(m_status)
+		print "idle_flag + " + str(idle_flag)
+		print "finish_flag" + str(finish_flag)
 		if ((m_status[:len("processing...")] == "processing...") and (idle_flag == True)):
 			print "start processing..."
 			# processData(datapath)

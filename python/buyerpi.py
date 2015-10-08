@@ -4,6 +4,7 @@ import binascii
 import subprocess
 import time
 import struct
+import os
 from io import BytesIO
 from random import randint
 import pprint
@@ -17,7 +18,7 @@ except ImportError:
 hosturl = 'http://localhost:8101'
 contract_addr = '0x65ecdc40d3f1cd8a352ef4db4dad4b975cf61f17'
 home = "/home/pi/"
-txtfilename = "python/data/singleSMERdata_10.txt"
+txtfilename = "python/data/multiSMERdata_10.txt"
 
 typeList = {
         "52617221": "EXT_RAR",
@@ -196,11 +197,12 @@ def getStatus(id):
 	return datapath
 
 def transData(datapath,sendDataurl):
-	p = subprocess.call(["scp",datapath,sendDataurl])
-	if (p):
-		return 1
-	else:
-		return 0
+	# p = subprocess.call(["scp",datapath,sendDataurl])
+	os.system("scp" + " " + datapath + " " + sendDataurl)
+	# if (p):
+	# 	return 1
+	# else:
+	# 	return 0
 
 def callforProcess(id):
 	c = pycurl.Curl()
@@ -216,8 +218,7 @@ def callforProcess(id):
 	#first, get coinbase address
 
 	# params = [{"from": my_addr, "to": contract_addr,"value":hex(3000000),"data": code_getpath_full}]
-	params = [{"from": my_addr, "to": contract_addr,"value":30000000,"data": code_getpath_full}]
-
+	params = [{"from": my_addr, "to": contract_addr,"value":10000000000000000,"data": code_getpath_full}]
 
 	data = json.dumps({'jsonrpc':'2.0','method':'eth_sendTransaction','params':params,'id':1})
 	pprint.pprint(data)
@@ -353,9 +354,23 @@ def getFilterChanges(fid):
 
 def transBranchData(num,datapath,sentDataurl):
 	i = 0
+	datapathBr = ""
 	while (i<num):
-		transData(datapath,sentDataurl)
+		datapathmid = datapath + str(i) + ".bmp" + " "
+		datapathBr += datapathmid
 		i += 1
+	transData(datapathBr,sentDataurl)
+
+def receiveBranchData(num,dataurl,revDatapath):
+	i = 0
+	num = 1
+
+	dataurlBr = ""
+	while (i<num):
+		dataurlmid = dataurl + str(i) + ".jpg" + " "
+		dataurlBr += dataurlmid
+		i += 1
+	transData(dataurlBr,revDatapath)
 
 
 def buySingle(sellerid):
@@ -393,8 +408,8 @@ def buySingle(sellerid):
 			pprint.pprint(m_status)
 			if (m_status[:len("finished")] == "finished" and (confirmFlag==False)):
 				# transData(getDataurl,getdatapath)
-				transBranchData(bmpnum,getDataurl,getdatapath)
-				c_result = checkData(getdatapath)
+				receiveBranchData(bmpnum,getDataurl,getdatapath)
+				c_result = checkData(checkDatapath)
 				if (c_result == "EXT_JPG"):
 					confirmation(sid)
 					confirmFlag = True
@@ -421,20 +436,27 @@ def buySingle(sellerid):
 					proFlag = True
 
 sid=0
-bmpnum = 10
-datapath = home + "ether/test/book.bmp"
-getdatapath = home + "ether/test/book.jpg"
+bmpnum = 1
+datapath = home + "ether/test/book"
+getdatapath = home + "ether/test/"
+checkDatapath = home + "ether/test/book0.jpg"
 sentDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/"
-getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book.jpg"
+getDataurl = "joseph@192.168.10.8:/home/joseph/ether/test/book"
 
 mytime = []
 i=0
-while (i < 50):
+while (i < 2):
 	old = time.time()
-	buySingle(32)
+	buySingle(49)
 	new = time.time()
 	add = new - old
 	mytime.append(add)
+
+	file_object = open(txtfilename, 'w')
+	for item in mytime:
+		file_object.write('%s\n' % item)
+	file_object.close()
+
 	i += 1
 
 file_object = open(txtfilename, 'w')
