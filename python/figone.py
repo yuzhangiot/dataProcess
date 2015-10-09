@@ -148,16 +148,17 @@ def drawFigone():
 
 def drawFigTwo():
 	smerdata,pidata,cool4data = readDataFromFile(10)
+	smerdatafilter = myfilter(smerdata)
 	# print max(smerdata)
-	drawPicTen(smerdata,pidata,cool4data)
+	drawPicTen(smerdatafilter,pidata,cool4data)
 
 def drawFigThree():
 	smerdata,pidata,cool4data = readDataFromFile(50)
 	smerdatafilter = myfilter(smerdata)
 	drawPicFifteen(smerdatafilter,pidata,cool4data)
 # drawFigone()
-# drawFigTwo()
-drawFigThree()
+drawFigTwo()
+# drawFigThree()
 
 
 	# print np.mean(smerdatafilter)
