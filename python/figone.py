@@ -91,6 +91,17 @@ def drawPicFifteen(smer,pi,cool4):
 
 	show()
 
+def drawPicEarn(cool0,cool4,ubuntu):
+	figure(figsize=(8,8), dpi=80)
+
+	subplot(1,1,1)
+
+	Z = (cool0,cool4,ubuntu)
+	pie(Z)
+	legend(loc='upper left')
+
+	show()
+
 def storeData():
 	datapath = home + "ether/test/book.bmp"
 	count = 0
@@ -129,6 +140,12 @@ def myfilter(numlist):
 			result.append(item)
 	return result
 
+def summoney(numlist):
+	result = 0
+	for item in numlist:
+		result += item[0]
+	return result
+
 def readDataFromFile(bmpnum):
 	bmpnum = str(bmpnum)
 	smerfile = home + "python/data/singleSMERdata_" + bmpnum + ".txt"
@@ -148,16 +165,30 @@ def drawFigone():
 
 def drawFigTwo():
 	smerdata,pidata,cool4data = readDataFromFile(10)
+	smerdatafilter = myfilter(smerdata)
 	# print max(smerdata)
-	drawPicTen(smerdata,pidata,cool4data)
+	drawPicTen(smerdatafilter,pidata,cool4data)
 
 def drawFigThree():
 	smerdata,pidata,cool4data = readDataFromFile(50)
 	smerdatafilter = myfilter(smerdata)
 	drawPicFifteen(smerdatafilter,pidata,cool4data)
+
+
+def drawFigSeven():
+	cool0_earn = readData(home + "python/data/multiSMERearn_cool0.txt")
+	cool4_earn = readData(home + "python/data/multiSMERearn_cool4.txt")
+	ubuntu_earn = readData(home + "python/data/multiSMERearn_ubuntu.txt")
+	cool0_earn_sum = summoney(cool0_earn)
+	cool4_earn_sum = summoney(cool4_earn)
+	ubuntu_earn_sum = summoney(ubuntu_earn)
+
+	drawPicEarn(cool0_earn_sum,cool4_earn_sum,ubuntu_earn_sum)
+	
 # drawFigone()
 # drawFigTwo()
-drawFigThree()
+# drawFigThree()
+drawFigSeven()
 
 
 	# print np.mean(smerdatafilter)
