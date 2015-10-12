@@ -91,15 +91,57 @@ def drawPicFifteen(smer,pi,cool4):
 
 	show()
 
+def drawPicColum(single,multi):
+	figure(figsize=(8,8), dpi=80)
+
+	subplot(1,1,1)
+
+	n = 2
+	X = np.arange(n)
+	# Y1 = (1-X/float(n)) * np.random.uniform(0.5,1.0,n)
+	# Y2 = (1-X/float(n)) * np.random.uniform(0.5,1.0,n)
+	Y = [single,multi]
+
+	bar(X, Y, facecolor='#9999ff', edgecolor='white')
+	# bar(X, +Y2, facecolor='#ff9999', edgecolor='white', label="RaspberryPi")
+
+	for x,y in zip(X,Y):
+		text(x+0.4, y+0.05, '%.2f' % y, ha='center', va= 'bottom')
+
+	xticks([0.3, 1.4],
+       [r'$\"single SMER system"$', r'$+\"multi-SMER system"$'])
+	xlim(-0.3,2.3)
+	ylim(0.0,+1500.00)
+	# legend(loc='upper left')
+
+	show()
+
 def drawPicEarn(cool0,cool4,ubuntu):
 	figure(figsize=(8,8), dpi=80)
 
 	subplot(1,1,1)
 
-	Z = (cool0,cool4,ubuntu)
-	pie(Z)
-	legend(loc='upper left')
-
+	# Z = (cool0,cool4,ubuntu)
+	# pie(Z)
+	# legend(loc='upper left')
+	figure(1, figsize=(6,6))
+	ax = axes([0.1, 0.1, 0.8, 0.8])
+	labels = 'Server01', 'Server02', 'Labtop'
+	# summy = cool0 + cool4 + ubuntu
+	# cool0_str = str(cool0)
+	# cool0 = float(cool0_str[:6])
+	# cool0 *= 1000
+	# cool4_str = str(cool4)
+	# cool4 = float(cool4_str[:5])
+	# cool4 *= 100
+	# ubuntu_str = str(ubuntu)
+	# ubuntu = float(ubuntu_str[:1])
+	fracs = [cool0, cool4, ubuntu]
+	total = sum(fracs)
+	explode=(0.05, 0, 0)
+	pie(fracs, explode=explode, labels=labels,
+	    autopct=lambda(p): '{:.0f}'.format(p * total / 100),
+	    shadow=True, startangle=90)
 	show()
 
 def storeData():
@@ -174,6 +216,14 @@ def drawFigThree():
 	smerdatafilter = myfilter(smerdata)
 	drawPicFifteen(smerdatafilter,pidata,cool4data)
 
+def drawFigSix():
+	multismerdata = readData(home + "python/data/multiSMERdata_10.txt")
+	singlesmerdata = readData(home + "python/data/singleSMERdata_200.txt")
+	multismerdata_avr = multismerdata[0]
+	singlesmerdata_avr = np.array(singlesmerdata[0])
+	print int(multismerdata_avr[0])
+	print int(singlesmerdata_avr[0])
+	drawPicColum(int(singlesmerdata_avr[0]),int(multismerdata_avr[0]))
 
 def drawFigSeven():
 	cool0_earn = readData(home + "python/data/multiSMERearn_cool0.txt")
@@ -188,6 +238,7 @@ def drawFigSeven():
 # drawFigone()
 # drawFigTwo()
 # drawFigThree()
+# drawFigSix()
 drawFigSeven()
 
 
